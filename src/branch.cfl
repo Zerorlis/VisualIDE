@@ -1,0 +1,32 @@
+compute_flow branch{
+    level 0{
+        rules{
+            r_0_1: input(score);
+        }
+        variables {
+            score: r_0_1;
+        }
+        control: true;
+    }
+    level 1{
+        rules{
+            r_1_1: >=(score,60);
+            r_1_2: pass("passed");
+            r_1_3: pass("failed");
+        }
+        variables {
+            msg: r_1_1?r_1_2:r_1_3;
+        }
+        control: true;
+    }
+    level 2{
+        rules{
+            r_3_1: pass(msg);
+        }
+        variables{
+            return: r_3_1;    
+        }
+        control: true;
+    }
+}
+

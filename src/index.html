@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="css/index.css">
+    <script src="js/jquery-3.3.1.js"></script>
+    <script src="js/vue.min.js"></script>
+
+    <title>可视化编程</title>
+</head>
+
+<body>
+
+    <div id="bar">
+        <div id="status" class="interbar">
+            <p>状态: </p>
+        </div>
+        <div id="debug" class="interbar">
+            <button> debug </button>
+        </div>
+        <div id="run" class="interbar">
+            <button> run </button>
+        </div>
+    </div>
+
+    <div id="tool">
+        <div id="toolbar">
+            <div>
+                <div class="rulemain" id="cancelchose">
+                    <p>取消选中</p>
+                </div>
+            </div>
+
+
+            <div>
+                <div class="rulemain" id="addvariable" v-on:click= "chooseAddVar($event)">
+                    <p>添加变量</p>
+                </div>
+            </div>
+
+
+            <div>
+                <div class="rulemain">
+                    <p>线条</p>
+                </div>
+                <div class="rulesecond" id="addline" v-on:click= "chooseAddLine($event)">
+                    <p> 添加线条 </p>
+                </div>
+                <div class="rulesecond" id="deleteline" v-on:click= "chooseDeleteLine($event)">
+                    <p> 删除线条 </p>
+                </div>
+            </div>
+
+
+            <div v-for="(item, key) in rules">
+                <div class="rulemain">
+                    <p> {{key}} </p>
+                </div>
+                <div class="rulesecond" v-for="i in item" :key="getDomID()+i" v-bind:id="getDomID()+i" v-on:click= "chooseRule($event,i)">
+                    <p> {{i}} </p>
+                </div>
+            </div>
+
+        </div>
+        <div id="description">
+            <p>描述:</p>
+            <p> 这是rule的描述</p>
+            <p>Value:</p>
+            <p> 这是value的值</p>
+        </div>
+    </div>
+    <div id="workarea">
+        <div id="work">
+            <canvas id="drawing"> </canvas>
+            <div id="levelbar" >
+                <div class="levelnote" v-for="(alevel,key) in data" :key="'bar'+key" v-bind:id="'bar'+key">
+                    <p>{{key}}</p>
+                    <button v-on:click="addNextLevel(key)"> 插入 </button>
+                    <button v-on:click="deleteLevel(key)"> 删除 </button>
+                </div>
+            </div>
+            <div>
+                <div class="level" v-for="(alevel,key) in data" :key="key" v-bind:id="key" v-on:click.stop= "chooseLevel($event)">
+                    <div class="sonlevel">
+                        <div class="rulediv" v-for="(value,k) in alevel.rules" :key="k" v-bind:id="k"v-on:click.stop= "chooseNode($event)">
+                            <div><label>名称</label><input v-model="value.id" v-on:click.stop=""></div>
+                            <div><input v-model="value.type" style="width:100%" v-on:click.stop=""></div>
+                            <div><label>参数</label><input v-model="value.parameter" v-on:click.stop=""></div>
+                            <button v-on:click.stop="deletenode(k)">删除</button>
+                        </div>
+                    </div>
+                    <div class="sonlevel">
+                        <div class="valuediv" v-for="(value,k) in alevel.variables" :key="k" v-bind:id="k" v-on:click.stop= "chooseNode($event)">
+                            <input v-model="value.name" v-on:click.stop="">
+                            <p v-on:click.stop=""> {{value.value}} </p>
+                            <button v-on:click.stop="deletenode(k)"> 删除 </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="addlevel" v-on:click = "addLastLevel()">
+                <p> 添加level</p>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+<script src="js/index.js"></script>
+
+</html>
