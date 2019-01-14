@@ -63,12 +63,12 @@
             </div>
 
         </div>
-        <div id="description">
+        <!-- <div id="description">
             <p>描述:</p>
             <p> 这是rule的描述</p>
             <p>Value:</p>
             <p> 这是value的值</p>
-        </div>
+        </div> -->
     </div>
     <div id="workarea">
         <div id="work">
@@ -87,14 +87,14 @@
                             <div><label>名称</label><input v-model="value.id" v-on:click.stop=""></div>
                             <div><input v-model="value.type" style="width:100%" v-on:click.stop=""></div>
                             <div><label>参数</label><input v-model="value.parameter" v-on:click.stop=""></div>
-                            <button v-on:click.stop="deletenode(k)">删除</button>
+                            <!-- <button v-on:click.stop="deletenode(k)">删除</button> -->
                         </div>
                     </div>
                     <div class="sonlevel">
                         <div class="valuediv" v-for="(value,k) in alevel.variables" :key="k" v-bind:id="k" v-on:click.stop= "chooseNode($event)">
                             <input v-model="value.name" v-on:click.stop="">
                             <p v-on:click.stop=""> {{value.value}} </p>
-                            <button v-on:click.stop="deletenode(k)"> 删除 </button>
+                            <!-- <button v-on:click.stop="deletenode(k)"> 删除 </button> -->
                         </div>
                     </div>
                 </div>
@@ -103,6 +103,12 @@
                 <p> 添加level</p>
             </div>
         </div>
+    </div>
+    <div id="desc">
+        <div><label>名称</label><input v-on:click.stop=""></div>
+        <div><label>类型</label><input v-on:click.stop=""></div>
+        <div><label>参数</label><input v-on:click.stop=""></div>
+        <div><label>描述</label><input v-on:click.stop=""></div>
     </div>
 
 </body>

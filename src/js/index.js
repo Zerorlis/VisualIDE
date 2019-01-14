@@ -179,7 +179,12 @@ choosed = {
     }
 }
 
-
+des = new Vue({
+    el: "#desc",
+    data:{
+        id:0,
+    },
+})
 
 
 tool = new Vue({

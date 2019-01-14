@@ -59,7 +59,7 @@ p{
 #tool{
     background-color: #fdf6d3;
     float: left;
-    width: 15%;
+    width: 10%;
     height:95%;
 }
 
@@ -85,8 +85,15 @@ p{
 }
 
 #workarea{
+    float: left;
     overflow: scroll;
+    width:75%;
     height:95%;
+}
+
+#desc{
+    overflow: scroll;
+    height: 95%;
 }
 
 
