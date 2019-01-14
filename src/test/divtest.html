@@ -10,14 +10,14 @@
     <div id="div1" style="height:200px;width:200px;border-style: dashed;left: 200px;top: 200px;position: absolute;margin: 0px; border-width: 3px">
 
     </div>
-    <div id="div2" style="height:400px;width:400px;border-style: dashed;left: 500px;top: 500px;position: absolute;margin: 0px;  border-width: 3px; cursor: pointer;">
+    <div id="div2" style="height:400px;width:400px;border-style: dashed;left: 900px;top: 500px;position: absolute;margin: 0px;  border-width: 3px; cursor: pointer;">
 
     </div>
 
-    <svg xmlns="http://www.w3.org/2000/svg" version="1.1" id="lines" style="height:1000px;width:1000px">
+    <svg xmlns="http://www.w3.org/2000/svg" version="1.1" id="lines" style="height:2000px;width:2000px">
 
     </svg>
-    <div id="mune" style="border-style:solid;position: absolute;margin: 0px; border-width: 3px;display: none;background: #ffffff">
+    <div id="mune" style="border-style:solid;position: absolute;margin: 0px; border-width: 3px;display: none;background-color: #ffffff">
         <ul>
             <li>帮助</li>
             <li>设置</li>
@@ -25,7 +25,6 @@
             <li>粘贴</li>
             <li>剪切</li>
         </ul>
-
     </div>
 </body>
 <script>
@@ -46,16 +45,18 @@
             var y = e.clientY;
             listBox.style.display = 'block';//右键点击时显示菜单框
             listBox.style.left = x + 'px';
-          　listBox.style.top = y + 'px';
+            listBox.style.top = y + 'px';
             // 这里下面要修改list里面的所有内容，包括注册的监听器
-            document.onclick = function(){
+
+
+            document.onclick = function () {
                 listBox.style.display = 'none';//再次点击时隐藏菜单框
             }
 
         });
 
 
-        // 添加鼠标放上去变化的属性
+        // 添加鼠标放上去变化的属性,改变颜色，代表选中
         line.addEventListener('mouseover', function (e) {
             e.currentTarget.style.setProperty("stroke", "rgb(0,0,255"); //设置改颜色
         })
@@ -67,23 +68,73 @@
 
 
     }
-    var div1 = $("#div1");
-    var div2 = $("#div2");
+    function moveline( x1, y1, x2, y2,id) {
+        var line = document.getElementById(id);
+        line.setAttribute("x1", x1);
+        line.setAttribute("y1", y1);
+        line.setAttribute("x2", x2);
+        line.setAttribute("y2", y2);
+    }
+    function moveing() {
+        var div1 = document.getElementById("div1");
+        var div2 = document.getElementById("div2");
 
-    var y1 = div1.offset().top;
-    var x1 = div1.offset().left;
-    var y2 = div2.offset().top;
-    var x2 = div2.offset().left;
 
-    var width1 = div1.outerWidth();
-    var height1 = div1.outerHeight();
-    var width2 = div2.outerWidth();
-    var height2 = div2.outerHeight();
-    line(0, 0, 500, 500, "2")
+        var y1 = div1.offsetTop;
+        var x1 = div1.offsetLeft;
+        var y2 = div2.offsetTop;
+        var x2 = div2.offsetLeft;
+
+        var width1 = div1.offsetWidth;
+        var height1 = div1.offsetHeight;
+        var width2 = div2.offsetWidth;
+        var height2 = div2.offsetHeight;
+        moveline(x1 + width1 / 2, y1 + height1, x2 + width2 / 2, y2, "1")
+    }
+
+    var div1 = document.getElementById("div1");
+    var div2 = document.getElementById("div2");
+
+
+    var y1 = div1.offsetTop;
+    var x1 = div1.offsetLeft;
+    var y2 = div2.offsetTop;
+    var x2 = div2.offsetLeft;
+
+    var width1 = div1.offsetWidth;
+    var height1 = div1.offsetHeight;
+    var width2 = div2.offsetWidth;
+    var height2 = div2.offsetHeight;
     line(x1 + width1 / 2, y1 + height1, x2 + width2 / 2, y2, "1");
-    document.oncontextmenu = function () {
+    document.oncontextmenu = function () { // 这里屏蔽掉默认的右键菜单。
         return false;
     }
+
+    // 拖动div
+    function addDrawDiv(div) {
+        div.addEventListener("mousedown", function (e) {
+
+            var distanceX = e.clientX - div.offsetLeft;
+            var distanceY = e.clientY - div.offsetTop;
+
+            document.onmousemove = function (e) { // 这里一定要是document，因为在整个界面里面移动，如果移动太快，就会导致这个不执行，所以选择整个可被移动界面作为要移动的地方。
+                div.style.left = e.clientX - distanceX + 'px';
+                div.style.top = e.clientY - distanceY + 'px';
+                moveing();
+            };
+
+            document.onmouseup = function (e) {
+                document.onmousemove = null;
+                document.onmouseup = null;
+            };
+
+        });
+    }
+    addDrawDiv(document.getElementById("div1"));
+    addDrawDiv(document.getElementById("div2"));
+
+
+
 
 
 
