@@ -1,0 +1,92 @@
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>一个div之间的直线</title>
+    <script src="../js/jquery-3.3.1.js"></script>
+</head>
+
+<body style="margin: 0px;">
+    <div id="div1" style="height:200px;width:200px;border-style: dashed;left: 200px;top: 200px;position: absolute;margin: 0px; border-width: 3px">
+
+    </div>
+    <div id="div2" style="height:400px;width:400px;border-style: dashed;left: 500px;top: 500px;position: absolute;margin: 0px;  border-width: 3px; cursor: pointer;">
+
+    </div>
+
+    <svg xmlns="http://www.w3.org/2000/svg" version="1.1" id="lines" style="height:1000px;width:1000px">
+
+    </svg>
+    <div id="mune" style="border-style:solid;position: absolute;margin: 0px; border-width: 3px;display: none;background: #ffffff">
+        <ul>
+            <li>帮助</li>
+            <li>设置</li>
+            <li>复制</li>
+            <li>粘贴</li>
+            <li>剪切</li>
+        </ul>
+
+    </div>
+</body>
+<script>
+    function line(x1, y1, x2, y2, xx) {
+        var main = document.getElementById("lines");
+        var line = document.createElementNS("http://www.w3.org/2000/svg", "line", true);
+        line.setAttribute("x1", x1);
+        line.setAttribute("y1", y1);
+        line.setAttribute("x2", x2);
+        line.setAttribute("y2", y2);
+        line.setAttribute("style", "stroke:rgb(255,0,0);stroke-width:5;cursor:pointer");
+        line.setAttribute("id", xx);
+        // 添加右键菜单属性
+        line.addEventListener('contextmenu', function (e) {
+            var listBox = document.getElementById('mune');//获取自定义右键菜单
+            e.preventDefault();
+            var x = e.clientX;
+            var y = e.clientY;
+            listBox.style.display = 'block';//右键点击时显示菜单框
+            listBox.style.left = x + 'px';
+          　listBox.style.top = y + 'px';
+            // 这里下面要修改list里面的所有内容，包括注册的监听器
+            document.onclick = function(){
+                listBox.style.display = 'none';//再次点击时隐藏菜单框
+            }
+
+        });
+
+
+        // 添加鼠标放上去变化的属性
+        line.addEventListener('mouseover', function (e) {
+            e.currentTarget.style.setProperty("stroke", "rgb(0,0,255"); //设置改颜色
+        })
+        line.addEventListener('mouseout', function (e) {
+            e.currentTarget.style.setProperty("stroke", "rgb(255,0,0"); //设置改颜色
+        })
+        main.appendChild(line);
+
+
+
+    }
+    var div1 = $("#div1");
+    var div2 = $("#div2");
+
+    var y1 = div1.offset().top;
+    var x1 = div1.offset().left;
+    var y2 = div2.offset().top;
+    var x2 = div2.offset().left;
+
+    var width1 = div1.outerWidth();
+    var height1 = div1.outerHeight();
+    var width2 = div2.outerWidth();
+    var height2 = div2.outerHeight();
+    line(0, 0, 500, 500, "2")
+    line(x1 + width1 / 2, y1 + height1, x2 + width2 / 2, y2, "1");
+    document.oncontextmenu = function () {
+        return false;
+    }
+
+
+
+</script>
+
+</html>
