@@ -97,14 +97,16 @@
                         <p>{{"level"+index1}}</p>
                     </div>
                     <div class="levelone" 
-                        v-on:mouseup="dragMouseUp($event)" 
-                        v-on:mousemove="onMouseMove($event)" 
+                        v-on:mouseup="dragMouseUp($event);moveDivMouseUp($event)" 
+                        v-on:mousemove="onMouseMove($event);moveDivMouseMove($event)" 
                         :data-loc="'rule_'+index1">
                         <div class="rulediv" v-for="(arule, index2) in alevel.rule" :key="arule.id" 
                             v-bind:id="arule.id"
                             :data-loc="'rule_'+index1+'_'+index2" 
+
                             v-on:contextmenu.stop="clear2();nodeRight(event);choosedNodeButton(event)"
                             v-on:click.stop="clear1();choosedNodeButton(event);addlinefunction(event)" 
+                            v-on:mousedown = "moveDivMouseDown($event)"
                             v-bind:class="{chooseddiv: attrAreaNode!=null&&attrAreaNode.id == arule.id }">
                             <div><label>名称</label><input v-model="arule.name"></div>
                             <div><label>类型</label><input v-model="arule.type"></div>
@@ -113,14 +115,15 @@
                     </div>
 
                     <div class="levelone" 
-                    v-on:mouseup="dragMouseUp($event)" 
-                    v-on:mousemove="onMouseMove($event)" 
+                    v-on:mouseup="dragMouseUp($event);moveDivMouseUp($event)" 
+                    v-on:mousemove="onMouseMove($event);moveDivMouseMove($event)" 
                     :data-loc="'variable_'+index1">
                         <div class="valuediv" v-for="(avariable, index3) in alevel.variable" :key="avariable.id"
                             v-bind:id="avariable.id" 
                             :data-loc="'variable_'+index1+'_'+index3" 
                             v-on:contextmenu.stop="clear2();nodeRight(event);choosedNodeButton(event)"
                             v-on:click.stop="clear1();choosedNodeButton(event);addlinefunction(event)"
+                            v-on:mousedown = "moveDivMouseDown($event)"
                             v-bind:class="{chooseddiv: attrAreaNode!=null&&attrAreaNode.id==avariable.id}">
                             <div><input v-model="avariable.name"></div>
                             <div><span>{{avariable.value}}</span></div>

@@ -42,7 +42,7 @@ computer_flow = [
             },
             {
                 "id": "rule2",
-                "name": "r_o_1",
+                "name": "r_o_2",
                 "type": "input",
                 "parameter": "",
                 "description": "一个输入的规则",
@@ -50,7 +50,7 @@ computer_flow = [
             },
             {
                 "id": "rule3",
-                "name": "r_o_1",
+                "name": "r_o_3",
                 "type": "input",
                 "parameter": "",
                 "description": "一个输入的规则",
@@ -60,14 +60,14 @@ computer_flow = [
         "variable": [
             {
                 "id": "variable1",
-                "name": "score",
+                "name": "score1",
                 "value": 1,
                 "description": "一个输入的变量",
                 "input": ["rule3", "rule2"],
             },
             {
                 "id": "variable2",
-                "name": "score",
+                "name": "score2",
                 "value": 1,
                 "description": "一个输入的变量",
                 "input": [],
@@ -82,7 +82,7 @@ computer_flow = [
         "rule": [
             {
                 "id": "rule4",
-                "name": "r_o_1",
+                "name": "r_o_4",
                 "type": "input",
                 "parameter": "",
                 "description": "一个输入的规则",
@@ -90,7 +90,7 @@ computer_flow = [
             },
             {
                 "id": "rule5",
-                "name": "r_o_1",
+                "name": "r_o_5",
                 "type": "input",
                 "parameter": "",
                 "description": "一个输入的规则",
@@ -98,7 +98,7 @@ computer_flow = [
             },
             {
                 "id": "rule6",
-                "name": "r_o_1",
+                "name": "r_o_6",
                 "type": "input",
                 "parameter": "",
                 "description": "一个输入的规则",
@@ -108,14 +108,14 @@ computer_flow = [
         "variable": [
             {
                 "id": "variable7",
-                "name": "score",
+                "name": "score4",
                 "value": 1,
                 "description": "一个输入的变量",
                 "input": [],
             },
             {
                 "id": "variable8",
-                "name": "score",
+                "name": "scoe5",
                 "value": 1,
                 "description": "一个输入的变量",
                 "input": [],
@@ -657,7 +657,6 @@ var workarea = new Vue({
             if (type == "rule") {
                 box.style.borderRadius = '10%';
             } else if (type == "variable") {
-                this.isDragAddNode = "variable";
                 box.style.borderRadius = '60%';
             }
             box.style.width=boxwidth+"px";
@@ -683,7 +682,6 @@ var workarea = new Vue({
             if (type == "rule") {
                 box.style.borderRadius = '10%';
             } else if (type == "variable") {
-                this.isDragAddNode = "variable";
                 box.style.borderRadius = '60%';
             }
             box.style.width=boxwidth+"px";
@@ -709,7 +707,6 @@ var workarea = new Vue({
             if (type == "rule") {
                 box.style.borderRadius = '10%';
             } else if (type == "variable") {
-                this.isDragAddNode = "variable";
                 box.style.borderRadius = '60%';
             }
             box.style.width=boxwidth+"px";
@@ -719,16 +716,18 @@ var workarea = new Vue({
         },
         // 修改两个node节点之间的位置，把某个node节点插入到某个位置,index
         moveDiv(level,type,indexOld,indexNew){
+            console.log(level+" "+type+" "+indexOld+" "+indexNew);
+            if((indexNew-indexOld)==1||(indexNew-indexOld)==0){
+                return;
+            }
             // 先算算删除了old之后，new的位置
             if(indexNew>indexOld){
                 indexNew--;
-            }else if((indexNew-indexOld)==1||(indexNew-indexOld)==-1){
-                return;
             }
-            var node = this.computer_flow[level][indexOld];
+            var node = this.computer_flow[level][type][indexOld];
             this.computer_flow[level][type].splice(indexOld, 1);
             this.computer_flow[level][type].splice(indexNew, 0, node);
-            setTimeout(line.drawAllLine, 1);
+            setTimeout(line.drawAllLine, 100);
 
         },
         // 要移动某个节点，只能在当前层移动，下面三个函数对应点击，移动和松开
@@ -740,7 +739,7 @@ var workarea = new Vue({
             var box = document.getElementById("dragBox");
             box.style.display = "block";
             let oldDateloc = event.currentTarget.getAttribute("data-loc");
-            let type = loc.split("_")[0];
+            let type = oldDateloc.split("_")[0];
             if (type == "rule") {
                 this.isMoveNode = oldDateloc;
                 box.style.borderRadius = '10%';
@@ -797,7 +796,7 @@ var workarea = new Vue({
             let point = event.clientX-dom.offsetLeft+dom.scrollLeft-102;
 
             let index = parseInt((point + space / 2) / space); //计算位置
-            moveDiv(level,type,old,oldindex);
+            this.moveDiv(level,type,oldindex,index);
 
         },
         //在两个node之间显示一个小小的线条来表示将要添加的位置
