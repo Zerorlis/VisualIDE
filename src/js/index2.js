@@ -182,6 +182,7 @@ var workarea = new Vue({
         "addLineBuffer": [], // 存着添加线的buff
         "rules": rules,
         "isDragAddNode": "",
+        "isMoveNode":"",
 
     },
     "methods": {
@@ -584,7 +585,6 @@ var workarea = new Vue({
             let level = parseInt(loc.split("_")[1]);
             let type = loc.split("_")[0];
             if (type != this.isDragAddNode) {
-                console.log(45238748392);
                 return; // 大部分的时候，会在这里直接返回掉，不用管
             }
             let num = this.computer_flow[level][type].length; // 这一层节点的数量
@@ -595,7 +595,6 @@ var workarea = new Vue({
             let point = event.clientX-dom.offsetLeft+dom.scrollLeft-102;
 
             let index = parseInt((point + space / 2) / space); //计算位置
-            console.log(index);
             if (type == "rule") {
                 this.addRule(level, index);
             } else if (type == "variable") {
@@ -604,7 +603,6 @@ var workarea = new Vue({
 
         },
         //在两个node之间显示一个小小的线条来表示将要添加的位置
-
         onMouseMove(event) {
             let loc = event.currentTarget.getAttribute("data-loc");
             let level = parseInt(loc.split("_")[1]);
@@ -620,7 +618,6 @@ var workarea = new Vue({
             let point = event.clientX-dom.offsetLeft+dom.scrollLeft-102;
 
             let index = parseInt((point + space / 2) / space); //计算位置
-            console.log(index+'ddd');
             if (index != 0 && index != num) {
                 let div1Id = this.computer_flow[level][type][index - 1]["id"];
                 let div2Id = this.computer_flow[level][type][index]["id"];
@@ -636,7 +633,6 @@ var workarea = new Vue({
             }
 
         },
-
         moveBoxBetweenDiv(d1, d2 ,type) {
             var div1 = document.getElementById(d1);
             var div2 = document.getElementById(d2);
@@ -721,6 +717,124 @@ var workarea = new Vue({
             box.style.left= width-5-boxwidth +"px";
             box.style.top=y1+"px";
         },
+        // 修改两个node节点之间的位置，把某个node节点插入到某个位置,index
+        moveDiv(level,type,indexOld,indexNew){
+            // 先算算删除了old之后，new的位置
+            if(indexNew>indexOld){
+                indexNew--;
+            }else if((indexNew-indexOld)==1||(indexNew-indexOld)==-1){
+                return;
+            }
+            var node = this.computer_flow[level][indexOld];
+            this.computer_flow[level][type].splice(indexOld, 1);
+            this.computer_flow[level][type].splice(indexNew, 0, node);
+            setTimeout(line.drawAllLine, 1);
+
+        },
+        // 要移动某个节点，只能在当前层移动，下面三个函数对应点击，移动和松开
+        moveDivMouseDown(event){
+            if (event.button != 0) {
+                return;
+            }
+            // 第一步，显示出来一个box
+            var box = document.getElementById("dragBox");
+            box.style.display = "block";
+            let oldDateloc = event.currentTarget.getAttribute("data-loc");
+            let type = loc.split("_")[0];
+            if (type == "rule") {
+                this.isMoveNode = oldDateloc;
+                box.style.borderRadius = '10%';
+            } else if (type == "variable") {
+                this.isMoveNode = oldDateloc;
+                box.style.borderRadius = '60%';
+            }
+
+            var x = event.clientX;
+            var y = event.clientY;
+            box.style.left = x + "px";
+            box.style.top = y + "px";
+            document.onmousemove = function (event) {
+                if (event.button != 0) {
+                    return;
+                }
+                var x = event.clientX;
+                var y = event.clientY;
+                box.style.left = x + "px";
+                box.style.top = y + "px";
+            };
+            document.onmouseup = function (event) {
+                if (event.button != 0) {
+                    return;
+                }
+                document.onmousemove = null;
+                document.onmouseup = null;
+                box.style.display = "none";
+                workarea.isMoveNode = "";
+                var line = document.getElementById("aLineBetweenNode")
+                line.style.display="none";
+            };
+        },
+        moveDivMouseUp(event) {
+            if (event.button != 0) {
+                return;
+            }
+
+            let loc = event.currentTarget.getAttribute("data-loc");
+            let level = parseInt(loc.split("_")[1]);
+            let type = loc.split("_")[0];
+
+            let oldlevel = parseInt(this.isMoveNode.split("_")[1]);
+            let oldtype = this.isMoveNode.split("_")[0];
+            let oldindex = this.isMoveNode.split("_")[2];
+            if (type != oldtype||level!=oldlevel) {
+                return; // 大部分的时候，会在这里直接返回掉，不用管
+            }
+            let num = this.computer_flow[level][type].length; // 这一层节点的数量
+            let width = event.currentTarget.scrollWidth; // 这一层的宽度
+            let space = width / num;
+            // 获取相对的位置
+            let dom = document.getElementById("workarea");
+            let point = event.clientX-dom.offsetLeft+dom.scrollLeft-102;
+
+            let index = parseInt((point + space / 2) / space); //计算位置
+            moveDiv(level,type,old,oldindex);
+
+        },
+        //在两个node之间显示一个小小的线条来表示将要添加的位置
+        moveDivMouseMove(event) {
+            let loc = event.currentTarget.getAttribute("data-loc");
+            let level = parseInt(loc.split("_")[1]);
+            let type = loc.split("_")[0];
+
+            let oldlevel = parseInt(this.isMoveNode.split("_")[1]);
+            let oldtype = this.isMoveNode.split("_")[0];
+            if (type != oldtype||level!=oldlevel) {
+                return; // 大部分的时候，会在这里直接返回掉，不用管
+            }
+            let num = this.computer_flow[level][type].length; // 这一层节点的数量
+            let width = event.currentTarget.scrollWidth; // 这一层的宽度
+            let space = width / num;
+            // 获取相对的位置
+            let dom = document.getElementById("workarea");
+            let point = event.clientX-dom.offsetLeft+dom.scrollLeft-102;
+
+            let index = parseInt((point + space / 2) / space); //计算位置
+            if (index != 0 && index != num) {
+                let div1Id = this.computer_flow[level][type][index - 1]["id"];
+                let div2Id = this.computer_flow[level][type][index]["id"];
+                this.moveBoxBetweenDiv(div1Id, div2Id,type);
+            }
+            if(index==0){
+                let div1Id = this.computer_flow[level][type][index]["id"];
+                this.moveBoxLeft(div1Id,type)
+            }
+            if(index==num){
+                let div1Id = this.computer_flow[level][type][index-1]["id"];
+                this.moveBoxRight(div1Id,type)
+            }
+
+        },
+
         
 
     },
