@@ -91,7 +91,7 @@
                     v-bind:id="alevel.id"
                     :data-loc="'level_'+index1" 
                     v-on:contextmenu.stop="clear2();levelRight(event);choosedLevelButton(event)" 
-                    v-on:click.stop="clear1()"
+                    v-on:mousedown.stop="clear1()"
                     v-bind:class="{choosedlevel: attrAreaNode!=null&&attrAreaNode.id == alevel.id }">
                     <div class="levelbar"  v-on:click.stop="clear1();choosedLevelButton(event)" :data-loc="'level_'+index1">
                         <p>{{"level"+index1}}</p>
@@ -133,6 +133,9 @@
                 <div class="addlevel" v-on:click="addLevelButton()">添加一层</div>
                 <div id="aLineBetweenNode">
 
+                </div>
+                <div id="aLineBetweenNode2">
+                    
                 </div>
             </div>
 

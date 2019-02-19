@@ -607,9 +607,13 @@ var workarea = new Vue({
             let loc = event.currentTarget.getAttribute("data-loc");
             let level = parseInt(loc.split("_")[1]);
             let type = loc.split("_")[0];
+
             if (type != this.isDragAddNode) {
                 return; // 大部分的时候，会在这里直接返回掉，不用管
             }
+            console.log(type+"111");
+            console.log(this.isDragAddNode);
+            console.log(1111111);
             let num = this.computer_flow[level][type].length; // 这一层节点的数量
             let width = event.currentTarget.scrollWidth; // 这一层的宽度
             let space = width / num;
