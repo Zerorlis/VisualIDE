@@ -156,7 +156,7 @@ p{
     display: flex;
     flex-direction: column;
     justify-content:center;
-    flex-wrap: nowrap;
+    flex-wrap: nowrap;  
     margin: 2px;
     
 }

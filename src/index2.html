@@ -10,74 +10,195 @@
     <title>可视化编程</title>
 </head>
 
-<body>
-    <div id="navigationBar">
-        <div class="dropNav1">
-            <div class="nav1Button">一级菜单1</div>
-            <div class="nav1DropContent">
-                <div class="normalNav2">
-                    <div class="nav2Button">二级菜单1</div>
-                </div>
-                <div class="normalNav2">
-                    <div class="nav2Button">二级菜单2</div>
-                </div>
-                <div class="dropNav2">
-                    <div class="nav2Button">二级菜单3 ></div>
-                    <div class="nav2DropContent">
-                        <div class="normalNav3">
-                            <div class="nav3Button">三级菜单1</div>
-                        </div>
-                        <div class="normalNav3">
-                            <div class="nav3Button">三级菜单2</div>
-                        </div>
-                        <div class="normalNav3">
-                            <div class="nav3Button">三级菜单3</div>
-                        </div>
-
+<body >
+    <div id="main" v-on:click="clear1()" v-on:contextmenu="clear1()">
+        <div id="navigationBar">
+            <div class="dropNav1">
+                <div class="nav1Button">一级菜单1</div>
+                <div class="nav1DropContent">
+                    <div class="normalNav2">
+                        <div class="nav2Button">二级菜单1</div>
                     </div>
-                </div>
-                <div class="normalNav2">
-                    <div class="nav2Button">二级菜单4</div>
+                    <div class="normalNav2">
+                        <div class="nav2Button">二级菜单2</div>
+                    </div>
+                    <div class="dropNav2">
+                        <div class="nav2Button">二级菜单3 ></div>
+                        <div class="nav2DropContent">
+                            <div class="normalNav3">
+                                <div class="nav3Button">三级菜单1</div>
+                            </div>
+                            <div class="normalNav3">
+                                <div class="nav3Button">三级菜单2</div>
+                            </div>
+                            <div class="normalNav3">
+                                <div class="nav3Button">三级菜单3</div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="normalNav2">
+                        <div class="nav2Button">二级菜单4</div>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="dropNav1">
-            <div class="nav1Button">一级菜单2</div>
-            <div class="nav1DropContent">
-                <div class="normalNav2">
-                    <div class="nav2Button">
-                        二级菜单1
+            <div class="dropNav1">
+                <div class="nav1Button">一级菜单2</div>
+                <div class="nav1DropContent">
+                    <div class="normalNav2">
+                        <div class="nav2Button">
+                            二级菜单1
+                        </div>
                     </div>
-                </div>
-                <div class="normalNav2">
-                    <div class="nav2Button">
-                        二级菜单2
+                    <div class="normalNav2">
+                        <div class="nav2Button">
+                            二级菜单2
+                        </div>
                     </div>
-                </div>
-                <div class="normalNav2">
-                    <div class="nav2Button">
-                        二级菜单3 
+                    <div class="normalNav2">
+                        <div class="nav2Button">
+                            二级菜单3
+                        </div>
                     </div>
-                </div>
-                <div class="normalNav2">
-                    <div class="nav2Button">
-                        二级菜单4
+                    <div class="normalNav2">
+                        <div class="nav2Button">
+                            二级菜单4
+                        </div>
                     </div>
-                </div>
 
+                </div>
+            </div>
+            <div class="normalNav1">
+                <div class="nav1Button">一级菜单3</div>
             </div>
         </div>
-        <div class="normalNav1">
-            <div class="nav1Button">一级菜单3</div>
+        <div id="toolCase">
+            <div class="toolTitle">工具箱</div>
+            <div class="toolButton"  v-on:click.stop= "clear2();addRuleToolButton(event)" v-on:mousedown="dragABox(event,'rule')">规则</div>
+            <div class="toolButton"  v-on:click.stop= "clear2();addVariableToolButton(event)" v-on:mousedown="dragABox(event,'variable')">变量</div>
+            <div class="toolButton"  v-bind:class="{addLineing: isAddLine}" v-on:click= "clear1();addLineButton(event)">连线</div>
+
         </div>
-    </div>
-    <div id="toolCase">
+        <div id="workarea">
+            <div id="innerworkarea">
 
-    </div>
-    <div id="workarea">
 
-    </div>
-    <div id="attributeArea">
+                <svg xmlns="http://www.w3.org/2000/svg" version="1.1" id="lines">
+
+                </svg>
+
+                <div class="level" id="level1" v-for="(alevel,index1) in computer_flow" :key="alevel.id" 
+                    v-bind:id="alevel.id"
+                    :data-loc="'level_'+index1" 
+                    v-on:contextmenu.stop="clear2();levelRight(event);choosedLevelButton(event)" 
+                    v-on:click.stop="clear1()"
+                    v-bind:class="{choosedlevel: attrAreaNode!=null&&attrAreaNode.id == alevel.id }">
+                    <div class="levelbar"  v-on:click.stop="clear1();choosedLevelButton(event)" :data-loc="'level_'+index1">
+                        <p>{{"level"+index1}}</p>
+                    </div>
+                    <div class="levelone" 
+                        v-on:mouseup="dragMouseUp($event)" 
+                        v-on:mousemove="onMouseMove($event)" 
+                        :data-loc="'rule_'+index1">
+                        <div class="rulediv" v-for="(arule, index2) in alevel.rule" :key="arule.id" 
+                            v-bind:id="arule.id"
+                            :data-loc="'rule_'+index1+'_'+index2" 
+                            v-on:contextmenu.stop="clear2();nodeRight(event);choosedNodeButton(event)"
+                            v-on:click.stop="clear1();choosedNodeButton(event);addlinefunction(event)" 
+                            v-bind:class="{chooseddiv: attrAreaNode!=null&&attrAreaNode.id == arule.id }">
+                            <div><label>名称</label><input v-model="arule.name"></div>
+                            <div><label>类型</label><input v-model="arule.type"></div>
+                            <div><label>参数</label><input v-model="arule.parameter"></div>
+                        </div>
+                    </div>
+
+                    <div class="levelone" 
+                    v-on:mouseup="dragMouseUp($event)" 
+                    v-on:mousemove="onMouseMove($event)" 
+                    :data-loc="'variable_'+index1">
+                        <div class="valuediv" v-for="(avariable, index3) in alevel.variable" :key="avariable.id"
+                            v-bind:id="avariable.id" 
+                            :data-loc="'variable_'+index1+'_'+index3" 
+                            v-on:contextmenu.stop="clear2();nodeRight(event);choosedNodeButton(event)"
+                            v-on:click.stop="clear1();choosedNodeButton(event);addlinefunction(event)"
+                            v-bind:class="{chooseddiv: attrAreaNode!=null&&attrAreaNode.id==avariable.id}">
+                            <div><input v-model="avariable.name"></div>
+                            <div><span>{{avariable.value}}</span></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="addlevel" v-on:click="addLevelButton()">添加一层</div>
+                <div id="aLineBetweenNode">
+
+                </div>
+            </div>
+
+        </div>
+        <div id="attributeArea" v-on:click.stop = "">
+            <div v-if="attrIsShow=='rule'">
+                <div class="toolTitle">规则属性</div>
+                <div class="attrButton"><label>名称</label><input v-model="attrAreaNode.name"></div>
+                <div class="attrButton"><label>类型</label>
+                    <div class="dropattr"><input v-model="attrAreaNode.type">
+                        <div v-on:click="ruleBoxShow(event)">↓</div>
+                    </div>
+                </div>
+                <div id="ruleBox" class="ruleBox">
+                    <div class = ruleBoxName>规则选择框</div>
+                    <div class="ruleboxContent" v-for="(atype , key) in rules"> 
+                        <div class="ruleBoxClass" v-on:click="ruleBoxClassShow(event)">
+                            {{key}}
+                        </div>
+                        <div class="ruleBoxRule" v-for="(arule, index) in atype" v-on:click="ruleBoxRuleChange(event)">
+                            {{arule}}
+                        </div>
+                    </div>
+                </div>
+                <div class="attrButton"><label>参数(请用,隔开)</label><input v-model="attrAreaNode.parameter"></div>
+                <div class="attrButton"><label>注释</label><textarea rows="8" v-model="attrAreaNode.description"></textarea></div>
+            </div>
+            <div v-if="attrIsShow=='variable'">
+                <div class="toolTitle">变量属性</div>
+                <div class="attrButton"><label>名称</label><input v-model="attrAreaNode.name"></div>
+                <div class="attrButton"><label>值</label><input v-model="attrAreaNode.value" readonly="readonly"></div>
+                <div class="attrButton"><label>注释</label><textarea rows="8" v-model="attrAreaNode.description"></textarea></div>
+            </div>
+            <div v-if="attrIsShow=='level'">
+                <div class="toolTitle">level属性</div>
+                <div class="attrButton"><label>注释</label><textarea rows="8" v-model="attrAreaNode.description"></textarea></div>
+            </div>
+        </div>
+        <div id="levelrm" class="rightMenu">
+            <div class="normalRightMenu">
+                <div class="rmButton" v-on:click="addUpLevelButton(event)">在上面插入一层</div>
+            </div>
+            <div class="normalRightMenu">
+                <div class="rmButton" v-on:click="addDownLevelButton(event)">在下面插入一层</div>
+            </div>
+            <div class="normalRightMenu">
+                <div class="rmButton" v-on:click="deleteLevelButton(event)"> 删除这层</div>
+            </div>
+            <div class="normalRightMenu">
+                <div class="rmButton" v-on:click="addRuleButton(event)">添加规则节点</div>
+            </div>
+            <div class="normalRightMenu">
+                <div class="rmButton" v-on:click="addVariableButton(event)">添加值节点</div>
+            </div>
+        </div>
+        <div id="noderm" class="rightMenu">
+            <div class="normalRightMenu">
+                <div class="rmButton" v-on:click="deleteNodeButton(event)">删除</div>
+            </div>
+        </div>
+        <div id="linesrm" class="rightMenu">
+            <div class="normalRightMenu">
+                <div class="rmButton" v-on:click="deletelineButton(event)">删除</div>
+            </div>
+        </div>
+        <div id="dragBox">
+            
+        </div>
+
 
     </div>
     <script src="js/index2.js"></script>
