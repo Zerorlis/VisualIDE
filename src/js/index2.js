@@ -134,7 +134,7 @@ testflow = {
     ]
 }
 var getRandomID = (function () {
-    var ID = 100;
+    var ID = 0;
     return function (type) {
         return type + (ID++);
     }
@@ -144,7 +144,7 @@ commonFunction = {
     getRandomID: getRandomID,
     //创建一个rule对象
     createRule: function (name, type, parameter, description, input) {
-        name = name || "NewRule";
+        name = name || getRandomID("NewRule");
         type = type || "input";
         parameter = parameter || "";
         description = description || "";
@@ -160,7 +160,7 @@ commonFunction = {
     },
     //创建一个value对象
     createVariable: function (name, description, input) {
-        name = name || "NewValue";
+        name = name || getRandomID("NewValue");
         description = description || "";
         input = input || [];
         return {
@@ -989,8 +989,8 @@ $(window).resize(line.drawAllLine);
 var testjs = "compute_flow iteration{\
     level 0{\
         rules{\
-            r_0_1: input();\
-            r_0_2: input();\
+            r_0_1: input(from);\
+            r_0_2: input(to);\
         }\
         variables {\
             from: r_0_1;\
@@ -1053,8 +1053,6 @@ var regParameters_noWord = /^(((?:"[^"]*?")|(?:'[^']*?')|(?:\d+(?:\.\d+)?))(?:,(
 var regParameters = /^(((?:"[^"]*?")|(?:'[^']*?')|(?:\d+(?:\.\d+)?)|(?:[a-zA-Z_]\w*))(?:,((?:"[^"]*?")|(?:'[^']*?')|(?:\d+(?:\.\d+)?)|(?:[a-zA-Z_]\w*)))*)?$/ // parameter在文件中的格式
 // 返回一个数组，数组里面是一个个computer_flow对象,computer_flow对象由flow和name两个属性，flow是数据流图的结构
 function toCompute_flow(flow) {
-
-
     // 变量的格式，必须以字母，数字，下划线组成，而且以字母开头的，所以要验证各种格式
     let str = flow.replace(/\s+/g, ""); // 去空格  
     str = str.replace(/\'/g, "\\'");// 转义字符，引号变化
@@ -1072,7 +1070,6 @@ function toCompute_flow(flow) {
 
     //接下来就是开始构建computer_flow,注意空格已经全部去掉,线转化为标准json
     let flowJS;
-    console.log(str);
     try {
         flowJS = JSON.parse(str);
     } catch (e) {
@@ -1121,7 +1118,6 @@ function toCompute_flow(flow) {
                 let aruleSplit = arule.split(/[(),]/);
                 let type = aruleSplit[0];
                 if (!(regWord.test(type) || /^(>|<|=|>=|<=)/.test(type))) {
-                    console.log(type);
                     console.log("error in " + alevelIndex + ":rule type is error");
                     return;
                 }
@@ -1175,10 +1171,19 @@ function toCompute_flow(flow) {
         for (let alevelIndex = 0; alevelIndex < compute_flow["flow"].length; alevelIndex++) {
             // 处理rule，从上一层的variable里面找对应的对象
             if (alevelIndex == 0) {
-                // 第一层的rule的index里面的输入给去掉先，怎么处理再说。    
+                // 第一层的rule的index里面的输入直接丢要参数一栏里面。    
                 let ruleLevel = compute_flow["flow"][alevelIndex]["rule"]
                 for (let aruleIndex = 0; aruleIndex < ruleLevel.length; aruleIndex++) {
+                    oldInput = ruleLevel[aruleIndex].input;
                     ruleLevel[aruleIndex].input = [];
+                    for(let i =0;i<oldInput.length;i++){
+                        if (ruleLevel[aruleIndex].parameter == "") {
+                            ruleLevel[aruleIndex].parameter += oldInput[i];
+                        } else {
+                            ruleLevel[aruleIndex].parameter += ",";
+                            ruleLevel[aruleIndex].parameter += oldInput[i];
+                        }
+                    }
                 }
             }
             if (alevelIndex > 0) {
@@ -1268,9 +1273,7 @@ function toCompute_flow(flow) {
 
             }
         }
-        console.log(compute_flow);
     }
-    console.log(compute_flows);
     return (compute_flows);
 }
 
@@ -1297,10 +1300,18 @@ function toCfiFile(compute_flow) {
                 console.log("error in level " + levelIndex + ":rule \"" + rule.name + "\" type is illegal")
                 return;
             }
-            if (!regParameters_noWord.test(rule.parameter)) {
-                console.log("error in level" + levelIndex + ":rule \"" + rule.name + "\" parameter is illegal")
-                return;
+            if(levelIndex!=0){
+                if (!regParameters_noWord.test(rule.parameter)) {
+                    console.log("error in level" + levelIndex + ":rule \"" + rule.name + "\" parameter is illegal")
+                    return;
+                }
+            }else{
+                if (!regParameters.test(rule.parameter)) {
+                    console.log("error in level" + levelIndex + ":rule \"" + rule.name + "\" parameter is illegal")
+                    return;
+                }
             }
+            
             // 处理input，input里面存着一群id，需要找到上一层的rule里面对应的名字
             let idList = [];
             let nameList = [];
@@ -1402,7 +1413,7 @@ function toCfiFile(compute_flow) {
     
     let flow = compute_flow["flow"];
     let flowName = compute_flow["name"];
-    let computer_flowStr = "computer_flow" +flowName+"{\nxxxxx}"; //xxxxx代表占位符，到时候替换掉
+    let computer_flowStr = "computer_flow " +flowName+"{\nxxxxx}"; //xxxxx代表占位符，到时候替换掉
     for (let levelIndex = 0; levelIndex < flow.length; levelIndex++) {
         let ruleLevel = flow[levelIndex]["rule"]
         let variableLevel = flow[levelIndex]["variable"];
@@ -1423,10 +1434,10 @@ function toCfiFile(compute_flow) {
         computer_flowStr=computer_flowStr.replace("xxxxx",levelStr);
     }
     computer_flowStr=computer_flowStr.replace("xxxxx","");
-    console.log(computer_flowStr);
+    return computer_flowStr;
 }
 
-toCfiFile(aa);
+console.log(toCfiFile(aa));
 
 
 
