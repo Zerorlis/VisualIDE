@@ -1,6 +1,6 @@
 // // rule的格式
 // var rule = {
-//     "id": "rule1", // 内部的id，同时也是div的id，要求全局唯一，格式，rule+唯一后缀.
+//     "id": "rule1", // 内部的id，同时也是div的id，要求全局唯一，格式，rule+唯一后缀.同时，通过id可以快速得到这个东西的位置
 //     "name":"r_o_1", // 规则的名字
 //     "type":"input", // 规则的类型
 //     "parameter":"",// 常量表
@@ -10,7 +10,7 @@
 
 //variables的格式
 // var variable = {
-//     "id":"variable2",// 内部的唯一id，方便快速找到
+//     "id":"variable2",// 内部的唯一id，
 //     "name":"score",// 变量的名字
 //     "value":1, // 变量显示的值
 //     "description":"一个输入的变量", // 一个描述
@@ -18,112 +18,121 @@
 // }
 
 // var level = {
-//     "id":"level123",
+//     "id":"level123",//全局唯一，同过div可以找到位置data-loc
 //     "rule":[],
 //     "variable":[],
 //     "description":"一层的描述",//一层的描述
+//     "control":"true", // 循环控制符
+//     "controlto":"",// 存着跳转到那一层的层数
 // } 
 
 // var levels = [] // 多个层次。
 
 
-computer_flow = [
-    {
-        "id": "level0",
-        "description": "",
-        "rule": [
-            {
-                "id": "rule1",
-                "name": "r_o_1",
-                "type": "input",
-                "parameter": "",
-                "description": "一个输入的规则",
-                "input": [],
-            },
-            {
-                "id": "rule2",
-                "name": "r_o_2",
-                "type": "input",
-                "parameter": "",
-                "description": "一个输入的规则",
-                "input": [],
-            },
-            {
-                "id": "rule3",
-                "name": "r_o_3",
-                "type": "input",
-                "parameter": "",
-                "description": "一个输入的规则",
-                "input": [],
-            },
-        ],
-        "variable": [
-            {
-                "id": "variable1",
-                "name": "score1",
-                "value": 1,
-                "description": "一个输入的变量",
-                "input": ["rule3", "rule2"],
-            },
-            {
-                "id": "variable2",
-                "name": "score2",
-                "value": 1,
-                "description": "一个输入的变量",
-                "input": [],
-            },
+testflow = {
+    "name": "flow",
+    "flow": [
+        {
+            "id": "level0", // 保持全局唯一即可，
+            "description": "",
+            "control": "true",
+            "controlto": "",
+            "rule": [
+                {
+                    "id": "rule1",
+                    "name": "r_o_1",
+                    "type": "input",
+                    "parameter": "",
+                    "description": "一个输入的规则",
+                    "input": [],
+                },
+                {
+                    "id": "rule2",
+                    "name": "r_o_2",
+                    "type": "input",
+                    "parameter": "",
+                    "description": "一个输入的规则",
+                    "input": [],
+                },
+                {
+                    "id": "rule3",
+                    "name": "r_o_3",
+                    "type": "input",
+                    "parameter": "",
+                    "description": "一个输入的规则",
+                    "input": [],
+                },
+            ],
+            "variable": [
+                {
+                    "id": "variable1",
+                    "name": "score1",
+                    "value": 1,
+                    "description": "一个输入的变量",
+                    "input": ["rule3", "rule2"],
+                },
+                {
+                    "id": "variable2",
+                    "name": "score2",
+                    "value": 1,
+                    "description": "一个输入的变量",
+                    "input": [],
+                },
 
-        ]
+            ]
 
-    },
-    {
-        "id": "level1",
-        "description": "",
-        "rule": [
-            {
-                "id": "rule4",
-                "name": "r_o_4",
-                "type": "input",
-                "parameter": "",
-                "description": "一个输入的规则",
-                "input": ["variable2", "variable1"],
-            },
-            {
-                "id": "rule5",
-                "name": "r_o_5",
-                "type": "input",
-                "parameter": "",
-                "description": "一个输入的规则",
-                "input": [],
-            },
-            {
-                "id": "rule6",
-                "name": "r_o_6",
-                "type": "input",
-                "parameter": "",
-                "description": "一个输入的规则",
-                "input": [],
-            },
-        ],
-        "variable": [
-            {
-                "id": "variable7",
-                "name": "score4",
-                "value": 1,
-                "description": "一个输入的变量",
-                "input": [],
-            },
-            {
-                "id": "variable8",
-                "name": "scoe5",
-                "value": 1,
-                "description": "一个输入的变量",
-                "input": [],
-            },
-        ]
 
-    }
-]
+        },
+        {
+            "id": "level1",
+            "description": "",
+            "control": " >(j,to)",
+            "controlto": "level0",
+            "rule": [
+                {
+                    "id": "rule4",
+                    "name": "r_o_4",
+                    "type": "input",
+                    "parameter": "",
+                    "description": "一个输入的规则",
+                    "input": ["variable2", "variable1"],
+                },
+                {
+                    "id": "rule5",
+                    "name": "r_o_5",
+                    "type": "input",
+                    "parameter": "",
+                    "description": "一个输入的规则",
+                    "input": [],
+                },
+                {
+                    "id": "rule6",
+                    "name": "r_o_6",
+                    "type": "input",
+                    "parameter": "",
+                    "description": "一个输入的规则",
+                    "input": [],
+                },
+            ],
+            "variable": [
+                {
+                    "id": "variable7",
+                    "name": "score4",
+                    "value": 1,
+                    "description": "一个输入的变量",
+                    "input": [],
+                },
+                {
+                    "id": "variable8",
+                    "name": "scoe5",
+                    "value": 1,
+                    "description": "一个输入的变量",
+                    "input": [],
+                },
+            ]
+        }
+    ]
+}
 var getRandomID = (function () {
     var ID = 100;
     return function (type) {
@@ -134,26 +143,32 @@ commonFunction = {
     //获取一个独一无二的名字，格式是type和一个数字后缀组成。这个名字用于作为vue的key
     getRandomID: getRandomID,
     //创建一个rule对象
-    createRule: function (name) {
+    createRule: function (name, type, parameter, description, input) {
         name = name || "NewRule";
+        type = type || "input";
+        parameter = parameter || "";
+        description = description || "";
+        input = input || [];
         return {
             "id": getRandomID("rule"),
             "name": name,
-            "type": "0undefined",
-            "parameter": "",
-            "description": "",
-            "input": [],
+            "type": type,
+            "parameter": parameter,
+            "description": description,
+            "input": input,
         }
     },
     //创建一个value对象
-    createVariable: function (name) {
+    createVariable: function (name, description, input) {
         name = name || "NewValue";
+        description = description || "";
+        input = input || [];
         return {
             "id": getRandomID("value"),
             "name": name,
             "value": 0,
-            "description": "",
-            "input": [],
+            "description": description,
+            "input": input,
         }
     },
     // 创建一个空白层
@@ -163,7 +178,40 @@ commonFunction = {
             "rule": [],
             "variable": [],
             "description": "",
+            "control": "",
+            "controlto": null,
         }
+    },
+    createCompute_flow: function (name) {
+        return {
+            "name": name,
+            "flow": [],
+        }
+    },
+    getLocFromDom: function (dom) {
+        if (dom) {
+            var loc = div.getAttribute("data-loc")
+            if (loc) {
+                var type = loc.split("_")[0];
+                var level = parseInt(loc.split("_")[1]);
+                var index = -1;
+                if (type != "level") {
+                    index = parseInt(loc.split("_")[2])
+                }
+                return ({
+                    "type": type,
+                    "level": level,
+                    "index": index,
+                })
+            } else {
+                return null;
+            }
+        } else {
+            return null;
+        }
+    },
+    getLocFromID: function (id) {
+        return this.getLocFromDom(document.getElementById(id));
     }
 }
 rules = {
@@ -176,13 +224,14 @@ rules = {
 var workarea = new Vue({
     "el": "#main",
     "data": {
-        "computer_flow": computer_flow,
+        "computer_flow": testflow["flow"],
         "attrAreaNode": null, // 现在属性栏目显示的node节点
         "isAddLine": false,
         "addLineBuffer": [], // 存着添加线的buff
         "rules": rules,
         "isDragAddNode": "",
-        "isMoveNode":"",
+        "isMoveNode": "",
+        "name": testflow["name"],
 
     },
     "methods": {
@@ -287,10 +336,10 @@ var workarea = new Vue({
         getWidth() {
             maxNum = 0;
             for (var i = 0; i < this.computer_flow.length; i++) {
-                if (computer_flow[i]["rule"].length > maxNum) {
+                if (this.computer_flow[i]["rule"].length > maxNum) {
                     maxNum = this.computer_flow[i]["rule"].length;
                 }
-                if (computer_flow[i]["variable"].length > maxNum) {
+                if (this.computer_flow[i]["variable"].length > maxNum) {
                     maxNum = this.computer_flow[i]["variable"].length;
                 }
             }
@@ -347,7 +396,7 @@ var workarea = new Vue({
         // 清理某一层的输入input，一般用于插入和删除的时候.
         clearLevelInput(index) {
             // 可能会超过层数，就不管了
-            if (index < 0 || index >= computer_flow.length) {
+            if (index < 0 || index >= this.computer_flow.length) {
                 return;
             }
 
@@ -572,7 +621,7 @@ var workarea = new Vue({
                 box.style.display = "none";
                 workarea.isDragAddNode = "";
                 var line = document.getElementById("aLineBetweenNode")
-                line.style.display="none";
+                line.style.display = "none";
             };
 
         },
@@ -592,7 +641,7 @@ var workarea = new Vue({
             let space = width / num;
             // 获取相对的位置
             let dom = document.getElementById("workarea");
-            let point = event.clientX-dom.offsetLeft+dom.scrollLeft-102;
+            let point = event.clientX - dom.offsetLeft + dom.scrollLeft - 102;
 
             let index = parseInt((point + space / 2) / space); //计算位置
             if (type == "rule") {
@@ -611,7 +660,7 @@ var workarea = new Vue({
             if (type != this.isDragAddNode) {
                 return; // 大部分的时候，会在这里直接返回掉，不用管
             }
-            console.log(type+"111");
+            console.log(type + "111");
             console.log(this.isDragAddNode);
             console.log(1111111);
             let num = this.computer_flow[level][type].length; // 这一层节点的数量
@@ -619,25 +668,25 @@ var workarea = new Vue({
             let space = width / num;
             // 获取相对的位置
             let dom = document.getElementById("workarea");
-            let point = event.clientX-dom.offsetLeft+dom.scrollLeft-102;
+            let point = event.clientX - dom.offsetLeft + dom.scrollLeft - 102;
 
             let index = parseInt((point + space / 2) / space); //计算位置
             if (index != 0 && index != num) {
                 let div1Id = this.computer_flow[level][type][index - 1]["id"];
                 let div2Id = this.computer_flow[level][type][index]["id"];
-                this.moveBoxBetweenDiv(div1Id, div2Id,type);
+                this.moveBoxBetweenDiv(div1Id, div2Id, type);
             }
-            if(index==0){
+            if (index == 0) {
                 let div1Id = this.computer_flow[level][type][index]["id"];
-                this.moveBoxLeft(div1Id,type)
+                this.moveBoxLeft(div1Id, type)
             }
-            if(index==num){
-                let div1Id = this.computer_flow[level][type][index-1]["id"];
-                this.moveBoxRight(div1Id,type)
+            if (index == num) {
+                let div1Id = this.computer_flow[level][type][index - 1]["id"];
+                this.moveBoxRight(div1Id, type)
             }
 
         },
-        moveBoxBetweenDiv(d1, d2 ,type) {
+        moveBoxBetweenDiv(d1, d2, type) {
             var div1 = document.getElementById(d1);
             var div2 = document.getElementById(d2);
 
@@ -653,22 +702,22 @@ var workarea = new Vue({
 
             var box = document.getElementById("aLineBetweenNode");
             // 那个东西的宽度,取决于还有多少剩余空间，如果大于130，可以赛一个，小于的画，同步缩小
-            if((x2-x1-width1)>=130){
+            if ((x2 - x1 - width1) >= 130) {
                 boxwidth = 100;
-            }else{
-                boxwidth=100*(x2-x1-width1)/130;
+            } else {
+                boxwidth = 100 * (x2 - x1 - width1) / 130;
             }
             if (type == "rule") {
                 box.style.borderRadius = '10%';
             } else if (type == "variable") {
                 box.style.borderRadius = '60%';
             }
-            box.style.width=boxwidth+"px";
-            box.style.display="block";
-            box.style.left=(x1+width1+x2)/2-boxwidth/2+"px";
-            box.style.top=y1+"px";
+            box.style.width = boxwidth + "px";
+            box.style.display = "block";
+            box.style.left = (x1 + width1 + x2) / 2 - boxwidth / 2 + "px";
+            box.style.top = y1 + "px";
         },
-        moveBoxLeft(d1,type){
+        moveBoxLeft(d1, type) {
             var div1 = document.getElementById(d1);
             var y1 = div1.offsetTop;
             var x1 = div1.offsetLeft;
@@ -678,22 +727,22 @@ var workarea = new Vue({
             var width = document.getElementById("innerworkarea").offsetWidth;
             var box = document.getElementById("aLineBetweenNode");
             // 那个东西的宽度,取决于还有多少剩余空间，如果大于130，可以赛一个，小于的画，同步缩小
-            if((x1-107)>=130){
+            if ((x1 - 107) >= 130) {
                 boxwidth = 100;
-            }else{
-                boxwidth=100*(x1-107)/130;
+            } else {
+                boxwidth = 100 * (x1 - 107) / 130;
             }
             if (type == "rule") {
                 box.style.borderRadius = '10%';
             } else if (type == "variable") {
                 box.style.borderRadius = '60%';
             }
-            box.style.width=boxwidth+"px";
-            box.style.display="block";
-            box.style.left="107px";
-            box.style.top=y1+"px";
+            box.style.width = boxwidth + "px";
+            box.style.display = "block";
+            box.style.left = "107px";
+            box.style.top = y1 + "px";
         },
-        moveBoxRight(d1,type){
+        moveBoxRight(d1, type) {
             var div1 = document.getElementById(d1);
             var y1 = div1.offsetTop;
             var x1 = div1.offsetLeft;
@@ -703,29 +752,28 @@ var workarea = new Vue({
             var width = document.getElementById("innerworkarea").offsetWidth;
             box = document.getElementById("aLineBetweenNode");
             // 那个东西的宽度,取决于还有多少剩余空间，如果大于130，可以赛一个，小于的画，同步缩小
-            if((width-5-x1-width1)>=130){
+            if ((width - 5 - x1 - width1) >= 130) {
                 boxwidth = 100;
-            }else{
-                boxwidth=100*(width-5-x1-width1)/130;
+            } else {
+                boxwidth = 100 * (width - 5 - x1 - width1) / 130;
             }
             if (type == "rule") {
                 box.style.borderRadius = '10%';
             } else if (type == "variable") {
                 box.style.borderRadius = '60%';
             }
-            box.style.width=boxwidth+"px";
-            box.style.display="block";
-            box.style.left= width-5-boxwidth +"px";
-            box.style.top=y1+"px";
+            box.style.width = boxwidth + "px";
+            box.style.display = "block";
+            box.style.left = width - 5 - boxwidth + "px";
+            box.style.top = y1 + "px";
         },
         // 修改两个node节点之间的位置，把某个node节点插入到某个位置,index
-        moveDiv(level,type,indexOld,indexNew){
-            console.log(level+" "+type+" "+indexOld+" "+indexNew);
-            if((indexNew-indexOld)==1||(indexNew-indexOld)==0){
+        moveDiv(level, type, indexOld, indexNew) {
+            if ((indexNew - indexOld) == 1 || (indexNew - indexOld) == 0) {
                 return;
             }
             // 先算算删除了old之后，new的位置
-            if(indexNew>indexOld){
+            if (indexNew > indexOld) {
                 indexNew--;
             }
             var node = this.computer_flow[level][type][indexOld];
@@ -735,7 +783,7 @@ var workarea = new Vue({
 
         },
         // 要移动某个节点，只能在当前层移动，下面三个函数对应点击，移动和松开
-        moveDivMouseDown(event){
+        moveDivMouseDown(event) {
             if (event.button != 0) {
                 return;
             }
@@ -774,7 +822,7 @@ var workarea = new Vue({
                 box.style.display = "none";
                 workarea.isMoveNode = "";
                 var line = document.getElementById("aLineBetweenNode")
-                line.style.display="none";
+                line.style.display = "none";
             };
         },
         moveDivMouseUp(event) {
@@ -789,7 +837,7 @@ var workarea = new Vue({
             let oldlevel = parseInt(this.isMoveNode.split("_")[1]);
             let oldtype = this.isMoveNode.split("_")[0];
             let oldindex = this.isMoveNode.split("_")[2];
-            if (type != oldtype||level!=oldlevel) {
+            if (type != oldtype || level != oldlevel) {
                 return; // 大部分的时候，会在这里直接返回掉，不用管
             }
             let num = this.computer_flow[level][type].length; // 这一层节点的数量
@@ -797,10 +845,10 @@ var workarea = new Vue({
             let space = width / num;
             // 获取相对的位置
             let dom = document.getElementById("workarea");
-            let point = event.clientX-dom.offsetLeft+dom.scrollLeft-102;
+            let point = event.clientX - dom.offsetLeft + dom.scrollLeft - 102;
 
             let index = parseInt((point + space / 2) / space); //计算位置
-            this.moveDiv(level,type,oldindex,index);
+            this.moveDiv(level, type, oldindex, index);
 
         },
         //在两个node之间显示一个小小的线条来表示将要添加的位置
@@ -811,7 +859,7 @@ var workarea = new Vue({
 
             let oldlevel = parseInt(this.isMoveNode.split("_")[1]);
             let oldtype = this.isMoveNode.split("_")[0];
-            if (type != oldtype||level!=oldlevel) {
+            if (type != oldtype || level != oldlevel) {
                 return; // 大部分的时候，会在这里直接返回掉，不用管
             }
             let num = this.computer_flow[level][type].length; // 这一层节点的数量
@@ -819,26 +867,26 @@ var workarea = new Vue({
             let space = width / num;
             // 获取相对的位置
             let dom = document.getElementById("workarea");
-            let point = event.clientX-dom.offsetLeft+dom.scrollLeft-102;
+            let point = event.clientX - dom.offsetLeft + dom.scrollLeft - 102;
 
             let index = parseInt((point + space / 2) / space); //计算位置
             if (index != 0 && index != num) {
                 let div1Id = this.computer_flow[level][type][index - 1]["id"];
                 let div2Id = this.computer_flow[level][type][index]["id"];
-                this.moveBoxBetweenDiv(div1Id, div2Id,type);
+                this.moveBoxBetweenDiv(div1Id, div2Id, type);
             }
-            if(index==0){
+            if (index == 0) {
                 let div1Id = this.computer_flow[level][type][index]["id"];
-                this.moveBoxLeft(div1Id,type)
+                this.moveBoxLeft(div1Id, type)
             }
-            if(index==num){
-                let div1Id = this.computer_flow[level][type][index-1]["id"];
-                this.moveBoxRight(div1Id,type)
+            if (index == num) {
+                let div1Id = this.computer_flow[level][type][index - 1]["id"];
+                this.moveBoxRight(div1Id, type)
             }
 
         },
 
-        
+
 
     },
     "computed": {
@@ -917,7 +965,7 @@ line = {
         workarea.resize();
         var main = document.getElementById("lines");
         main.innerHTML = ""; // 删除内部所有的线条，重现开始画。
-        for (let alevel of computer_flow) {
+        for (let alevel of workarea.computer_flow) {
             for (let arule of alevel["rule"]) {
                 for (let ainput of arule["input"]) {
                     line.lineBetweenDiv(ainput, arule.id);
@@ -934,6 +982,451 @@ line = {
 
 }
 
-$(window).resize(line.drawAllLine);
+
 line.drawAllLine();
+$(window).resize(line.drawAllLine);
+
+var testjs = "compute_flow iteration{\
+    level 0{\
+        rules{\
+            r_0_1: input();\
+            r_0_2: input();\
+        }\
+        variables {\
+            from: r_0_1;\
+            to: r_0_2;\
+        }\
+        control: true;\
+    }\
+    level 1{\
+        rules{\
+            r_1_1: pass(from);\
+            r_1_2: pass(0);\
+            r_1_3: pass(to);\
+        }\
+        variables {\
+            i: r_1_1;\
+            sum: r_1_2;\
+            to: r_1_3;\
+        }\
+        control: true;\
+    }\
+    level 2{\
+        rules{\
+            r_2_1: add(i,1);\
+            r_2_2: add(i,sum);\
+            r_2_3: pass(to);\
+        }\
+        variables {\
+            j: r_2_1;\
+            s: r_2_2;\
+            to:r_2_3;\
+        }\
+        control: >(j,to):1;\
+    }\
+    level 3{\
+        rules{\
+            r_3_1: pass(s);\
+        }\
+        variables {\
+            return: r_3_1;\
+        }\
+        control: true;\
+    }\
+    level 4{\
+        rules{\
+            r_1_1: >=(return,60);\
+            r_1_2: pass(\"passed\");\
+            r_1_3: pass(\"failed\");\
+        }\
+        variables {\
+            msg: r_1_1?r_1_2:r_1_3;\
+        }\
+        control: true;\
+    }\
+}";
+var regWord = /^[a-zA-Z_]\w*$/ // 变量的命名规范
+var regNum = /^\d+(\.\d+)?$/ // 数字或者小数的命名规范
+var regString = /(^".*"$)|(^'.*'$)/ //String的格式规范
+var regRuleType = /(^>=$)|(^<=$)|(^=$)|(^>$)|(^<$)|(^[a-zA-Z_]\w*$)/
+var regParameters_noWord = /^(((?:"[^"]*?")|(?:'[^']*?')|(?:\d+(?:\.\d+)?))(?:,((?:"[^"]*?")|(?:'[^']*?')|(?:\d+(?:\.\d+)?)))*)?$/ // parameter参数的格式
+var regParameters = /^(((?:"[^"]*?")|(?:'[^']*?')|(?:\d+(?:\.\d+)?)|(?:[a-zA-Z_]\w*))(?:,((?:"[^"]*?")|(?:'[^']*?')|(?:\d+(?:\.\d+)?)|(?:[a-zA-Z_]\w*)))*)?$/ // parameter在文件中的格式
+// 返回一个数组，数组里面是一个个computer_flow对象,computer_flow对象由flow和name两个属性，flow是数据流图的结构
+function toCompute_flow(flow) {
+
+
+    // 变量的格式，必须以字母，数字，下划线组成，而且以字母开头的，所以要验证各种格式
+    let str = flow.replace(/\s+/g, ""); // 去空格  
+    str = str.replace(/\'/g, "\\'");// 转义字符，引号变化
+    str = str.replace(/\"/g, "\\\"") // 转义字符
+    str = str.replace(/([^:;{}]+)/g, "\"$1\""); //用冒号封号括号来分割，之间的一定是字符串,两边加上""
+    // 处理: : ;的问题，:后面一定是个;，里面多了俩”
+    str = str.replace(/"([^:;{}]+)":"([^:;{}]+)":"([^:;{}]+)";/g, "\"$1\":\"$2:$3\";");
+    str = str.replace(/{/g, ":{"); //左括号全部变成:{
+    str = str.replace(/}/g, "},"); // 右括号加上变成},
+    str = str.replace(/;/g, ","); // ;全部变成，
+    str = "{" + str + "}";// 两边加上}
+    str = str.replace(/,}/g, "}"); // 如果是最后一个}前的属性，要去掉一个，这个，不需要
+
+    //经过处理，已经是正确的json
+
+    //接下来就是开始构建computer_flow,注意空格已经全部去掉,线转化为标准json
+    let flowJS;
+    console.log(str);
+    try {
+        flowJS = JSON.parse(str);
+    } catch (e) {
+        console.log("error to json");
+        return;
+    }
+
+    compute_flows = []
+    for (let aflowIndex in flowJS) {
+        aflow = flowJS[aflowIndex];
+        let name = aflowIndex.substring(12);
+        compute_flow = commonFunction.createCompute_flow(name)
+        compute_flows.push(compute_flow);
+        for (let alevelIndex in aflow) {
+            alevel = aflow[alevelIndex];
+            levelNew = commonFunction.createLevel();
+            compute_flow["flow"].push(levelNew); //level添加进去
+            // 处理control
+            if (alevel["control"] == undefined) {
+                //  检查规范性能，错误处理
+                console.log("error in " + alevelIndex + ":can't find control");
+                return;
+            } else if (alevel["control"] == "true") {
+                levelNew.control = "true";
+            } else if (/^(>|<|=|>=|<=)\([a-zA-Z_]\w*(,[a-zA-Z_]\w*)+\):\d+$/.test(alevel["control"])) { //跳转属性，需要用:做分割
+                levelNew.control = alevel.control.split(":")[0];
+                levelNew.controlto = alevel.control.split(":")[1]; // 先暂时用字符串，后期修正一下
+            } else {
+                console.log("error in " + alevelIndex + ":error control");
+                return;
+            }
+            // 处理rule
+            for (let aruleIndex in alevel["rules"]) {
+                let arule = alevel["rules"][aruleIndex];
+                let name = aruleIndex;
+                //检测name合不合法,检测arule里面是不是有()
+                if (!regWord.test(name)) {
+                    console.log("error in " + alevelIndex + ":rules name error");
+                    return;
+                }
+                if (!/^[^(),]+\(([^(),]+(,[^(),]+)*)?\)$/.test(arule)) {
+                    console.log("error in " + alevelIndex + ":rules error");
+                    return;
+                }
+                // arule 的格式 input(a,b),括号里面是也有可能是一些常量,常量注意放到parameter里面
+                let aruleSplit = arule.split(/[(),]/);
+                let type = aruleSplit[0];
+                if (!(regWord.test(type) || /^(>|<|=|>=|<=)/.test(type))) {
+                    console.log(type);
+                    console.log("error in " + alevelIndex + ":rule type is error");
+                    return;
+                }
+                let ruleNew = commonFunction.createRule(name, type);
+                for (let i = 1; i < aruleSplit.length; i++) {
+                    if (aruleSplit[i] != "") { // 过滤.一些不必要的东西
+                        if (regWord.test(aruleSplit[i]) || regNum.test(aruleSplit[i]) || regString.test(aruleSplit[i])) {
+                            ruleNew.input.push(aruleSplit[i]);
+                        } else {
+                            console.log("error in " + alevelIndex + ":rule parameter is error");
+                            return;
+                        }
+                    }
+                }
+                levelNew.rule.push(ruleNew);
+            }
+            for (let avariableIndex in alevel["variables"]) {
+                let avariable = alevel["variables"][avariableIndex];
+                let name = avariableIndex;
+                if (!regWord.test(name)) {
+                    console.log("error in " + alevelIndex + ":variable name is error");
+                    return;
+                }
+                let variableNew = commonFunction.createVariable(name);
+                // 验证下是不是r_1_1?r_1_2:r_1_3这样的格式，如果不是这样的格式，需要幻化为三个输入
+
+                if (regWord.test(avariable)) {
+                    variableNew.input.push(avariable);
+                } else if (/^[^\?:]+\?[^\?:]+:[^\?:]+$/.test(avariable)) {
+                    let avariableSplit = avariable.split(/[:\?]/);
+                    if (avariableSplit.length != 3) {
+                        console.log("error in " + alevelIndex + ":variable ifInput  error");
+                        return;
+                    }
+                    for (let i = 0; i < avariableSplit.length; i++) {
+                        if (regWord.test(avariableSplit[i])) {
+                            variableNew.input.push(avariableSplit[i]);
+                        } else {
+                            console.log("error in " + alevelIndex + ":variable ifInput  error");
+                            return;
+                        }
+                    }
+                } else {
+                    console.log("error in " + alevelIndex + ":variable input error");
+                    return;
+                }
+                levelNew.variable.push(variableNew);
+            }
+        }
+        // 此时，所有的level构建完成，然后可以开始搞层间关系,毕竟现在的input还只是以字符串的形式存进来的
+        for (let alevelIndex = 0; alevelIndex < compute_flow["flow"].length; alevelIndex++) {
+            // 处理rule，从上一层的variable里面找对应的对象
+            if (alevelIndex == 0) {
+                // 第一层的rule的index里面的输入给去掉先，怎么处理再说。    
+                let ruleLevel = compute_flow["flow"][alevelIndex]["rule"]
+                for (let aruleIndex = 0; aruleIndex < ruleLevel.length; aruleIndex++) {
+                    ruleLevel[aruleIndex].input = [];
+                }
+            }
+            if (alevelIndex > 0) {
+                // 第一步，先从上一层把所有的variable里面拿东西，变成一个数组
+                let lastVariableNames = []
+                let lastVariableLevel = compute_flow["flow"][alevelIndex - 1]["variable"]
+                for (let avariableIndex = 0; avariableIndex < lastVariableLevel.length; avariableIndex++) {
+                    lastVariableNames.push(lastVariableLevel[avariableIndex].name);
+                }
+                let ruleLevel = compute_flow["flow"][alevelIndex]["rule"];
+                for (let aruleIndex = 0; aruleIndex < ruleLevel.length; aruleIndex++) {
+                    // 得到了一个rule，开始处理input
+                    oldInput = ruleLevel[aruleIndex].input;
+                    ruleLevel[aruleIndex].input = [];
+                    for (let inputIndex = 0; inputIndex < oldInput.length; inputIndex++) {
+                        let input = oldInput[inputIndex]
+                        if (regWord.test(input)) {
+                            // input是个变量
+                            let lastIndex = lastVariableNames.indexOf(input);
+                            // rule的input在上一层里面有很多的类型，要做好判断
+                            if (lastIndex < 0) {
+                                console.log("error in level " + alevelIndex + ": error rule input " + input);
+                                return;
+                            } else {
+                                ruleLevel[aruleIndex].input.push(lastVariableLevel[lastIndex].id)
+                            }
+                        } else if (regString.test(input)) {
+                            // input是个是个字符串，字符串由冒号隔开
+                            if (ruleLevel[aruleIndex].parameter == "") {
+                                ruleLevel[aruleIndex].parameter += input;
+                            } else {
+                                ruleLevel[aruleIndex].parameter += ",";
+                                ruleLevel[aruleIndex].parameter += input;
+                            }
+                        } else if (regNum.test(input)) {
+                            // 是个数字
+                            if (ruleLevel[aruleIndex].parameter == "") {
+                                ruleLevel[aruleIndex].parameter += input;
+                            } else {
+                                ruleLevel[aruleIndex].parameter += ",";
+                                ruleLevel[aruleIndex].parameter += input;
+                            }
+                        } else {
+                            console.log("error in level " + alevelIndex + ": error rule parameter " + input);
+                            return;
+                        }
+
+                    }
+                }
+            }
+            {
+                // rule处理完成了，处理variable，直接本层里面挑选就行了
+
+
+                // 第一步，先处理上一层的rule，找到对应的输入
+                let lastRuleNames = []
+                let lastRuleLevel = compute_flow["flow"][alevelIndex]["rule"];
+                for (let aruleIndex = 0; aruleIndex < lastRuleLevel.length; aruleIndex++) {
+                    lastRuleNames.push(lastRuleLevel[aruleIndex].name);
+                }
+
+                let variableLevel = compute_flow["flow"][alevelIndex]["variable"];
+
+                for (let avariableIndex = 0; avariableIndex < variableLevel.length; avariableIndex++) {
+                    // 得到了一个variable，开始处理input
+                    oldInput = variableLevel[avariableIndex].input;
+                    variableLevel[avariableIndex].input = [];
+
+                    for (let inputIndex = 0; inputIndex < oldInput.length; inputIndex++) {
+                        let input = oldInput[inputIndex]
+                        if (regWord.test(input)) {
+                            // input一定是个rule的名字，复合命名规范
+                            let lastIndex = lastRuleNames.indexOf(input);
+                            if (lastIndex < 0) {
+                                console.log("error in level " + alevelIndex + ": error variable input " + input);
+                                return;
+                            } else {
+                                variableLevel[avariableIndex].input.push(lastRuleLevel[lastIndex].id)
+                            }
+                        } else {
+                            console.log("error in level " + alevelIndex + ": error rule parameter " + input);
+                            return;
+                        }
+
+                    }
+                }
+
+            }
+        }
+        console.log(compute_flow);
+    }
+    console.log(compute_flows);
+    return (compute_flows);
+}
+
+var aa = toCompute_flow(testjs)[0];
+workarea.computer_flow = aa["flow"];
+workarea.name = aa["name"];
+setTimeout(line.drawAllLine, 1);
+
+
+//test
+//reg2 = /(?:(?<=,|^)".*?"(?=,|$))|(?:(?<=,|^)'.*?'(?=,|$))|(?:(?<=,|^)\d+(?:\.\d+)?(?=,|$))|(?:(?<=,|^)[a-zA-Z_]\w*(?=,|$))/
+function toCfiFile(compute_flow) {
+    // 处理一层里面的ruleLevel，返回rules的字符串
+    function processRuleLevel(ruleLevel, levelIndex, lastVariableLevel) {
+        ruleString = "        rules{\nxxxxx        }\n";
+        for (let ruleIndex = 0; ruleIndex < ruleLevel.length; ruleIndex++) {
+            let rule = ruleLevel[ruleIndex];// 拿到一个rule对象
+            //rule对象变身字符串，注意对rule对象的所有内容的一个变量合法性进行检测
+            if (!regWord.test(rule.name)) {
+                console.log("error in level " + levelIndex + ":rule \"" + rule.name + "\" is illegal")
+                return;
+            }
+            if (!regRuleType.test(rule.type)) {
+                console.log("error in level " + levelIndex + ":rule \"" + rule.name + "\" type is illegal")
+                return;
+            }
+            if (!regParameters_noWord.test(rule.parameter)) {
+                console.log("error in level" + levelIndex + ":rule \"" + rule.name + "\" parameter is illegal")
+                return;
+            }
+            // 处理input，input里面存着一群id，需要找到上一层的rule里面对应的名字
+            let idList = [];
+            let nameList = [];
+            let parameter = "";
+            if (levelIndex != 0) {
+                for (let avariableIndex = 0; avariableIndex < lastVariableLevel.length; avariableIndex++) {
+                    idList.push(lastVariableLevel[avariableIndex].id);
+                    nameList.push(lastVariableLevel[avariableIndex].name);
+                }
+                for (let inputIndex = 0; inputIndex < rule.input.length; inputIndex++) {
+                    let i = idList.indexOf(rule.input[inputIndex]);
+                    if (i >= 0) {
+                        // 输入的id有效，转化为名字
+                        if (parameter == "") {
+                            parameter += nameList[i];
+                        } else {
+                            parameter = parameter + "," + nameList[i];
+                        }
+                    } else {
+                        console.log("error in level" + levelIndex + ":rule \"" + rule.name + "\" input has some wrong")
+                        return;
+                    }
+                }
+            }
+            if (rule.parameter != "" && parameter == "") {
+                parameter += rule.parameter;
+            } else if (rule.parameter != "" && parameter != "") {
+                parameter = parameter + ", " + rule.parameter;
+            }
+            let arulestr = "            " + rule.name + ": " + rule.type + "(" + parameter + ");\nxxxxx";
+            ruleString = ruleString.replace("xxxxx", arulestr);
+        }
+        ruleString = ruleString.replace("xxxxx", "");
+        return ruleString;
+    }
+    function processVariableLevel(variableLevel, levelIndex, lastRuleLevel) {
+        let variableString = "        variables{\nxxxxx        }\n";
+        for (let variableIndex = 0; variableIndex < variableLevel.length; variableIndex++) {
+            let variable = variableLevel[variableIndex];
+            if (!regWord.test(variable.name)) {
+                console.log("error in level " + levelIndex + ":variable \"" + variable.name + "\" is illegal")
+                return;
+            }
+            // 处理input，input只能有3个输入或者1个输入
+
+            let idList = [];
+            let nameList = [];
+            let input = "";
+            for (let aRuleIndex = 0; aRuleIndex < lastRuleLevel.length; aRuleIndex++) {
+                idList.push(lastRuleLevel[aRuleIndex].id);
+                nameList.push(lastRuleLevel[aRuleIndex].name);
+            }
+            if (variable.input.length == 1) {
+                let i = idList.indexOf(variable.input[0]);
+                if (i >= 0) {
+                    input = nameList[i];
+                } else {
+                    console.log("error in level" + levelIndex + ":variable \"" + variable.name + "\" input has some wrong")
+                    return;
+                }
+            } else if (variable.input.length == 3) {
+                // 要做好检测,哪个在前面,在最左边的是第一个位置，否则第二个位置，第三个位置
+                function sortNumber(a, b) {
+                    return a - b
+                }
+                let tmpList = [];
+                for (let i = 0; i < 3; i++) {
+                    let j = idList.indexOf(variable.input[i])
+                    if (j<0){
+                        console.log("error in level" + levelIndex + ":variable \"" + variable.name + "\" input has some wrong")
+                        return;
+                    }
+                    tmpList.push(j);
+                }
+                tmpList.sort(sortNumber); // 从小到大排序
+                input = nameList[0]+"?"+nameList[1]+":"+nameList[2];
+
+            }else{
+                console.log("error in level" + levelIndex + ":variable \"" + variable.name + "\" input has some wrong")
+                return;
+            }
+            let avariablestr = "            "+variable.name+": "+input+";\nxxxxx";
+            variableString = variableString.replace("xxxxx", avariablestr);
+        }
+        variableString = variableString.replace("xxxxx", "");
+        return variableString;
+    }
+    function processControl(level,levelIndex){
+        if(level.control == "true"){
+            return "        control: true;\n";
+        }else if(level.control == ""){
+            console.log("error in level " + levelIndex + ":variable \"" + variable.name + "\" is illegal")
+            return;
+        }else{
+            return"        control: "+level.control+":"+level.controlto+"\n";
+        }
+    }
+
+    
+    let flow = compute_flow["flow"];
+    let flowName = compute_flow["name"];
+    let computer_flowStr = "computer_flow" +flowName+"{\nxxxxx}"; //xxxxx代表占位符，到时候替换掉
+    for (let levelIndex = 0; levelIndex < flow.length; levelIndex++) {
+        let ruleLevel = flow[levelIndex]["rule"]
+        let variableLevel = flow[levelIndex]["variable"];
+        let lastVariableLevel = null;
+        if (levelIndex != 0) {
+            lastVariableLevel = flow[levelIndex - 1]["variable"];
+        }
+        // 第一步，处理rule
+        let ruleStr = processRuleLevel(ruleLevel, levelIndex, lastVariableLevel);
+        // 第二步，处理variable
+        let variableStr = processVariableLevel(variableLevel, levelIndex, ruleLevel);
+        // 第三步，处理control，传入整个层
+        let controlStr = processControl(flow[levelIndex], levelIndex);
+        if(ruleStr==undefined||variableStr==undefined||controlStr==undefined){
+            return;
+        }
+        let levelStr = "    level "+levelIndex+"{\n"+ruleStr+variableStr+controlStr+"    }\nxxxxx";
+        computer_flowStr=computer_flowStr.replace("xxxxx",levelStr);
+    }
+    computer_flowStr=computer_flowStr.replace("xxxxx","");
+    console.log(computer_flowStr);
+}
+
+toCfiFile(aa);
+
+
 

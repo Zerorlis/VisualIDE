@@ -2,7 +2,7 @@ compute_flow branch{
     level 0{
         rules{
             r_0_1: input(score);
-        }
+        }?
         variables {
             score: r_0_1;
         }

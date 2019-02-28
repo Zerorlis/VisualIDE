@@ -95,6 +95,10 @@
                     v-bind:class="{choosedlevel: attrAreaNode!=null&&attrAreaNode.id == alevel.id }">
                     <div class="levelbar"  v-on:click.stop="clear1();choosedLevelButton(event)" :data-loc="'level_'+index1">
                         <p>{{"level"+index1}}</p>
+                        <label>跳转条件</label>
+                        <input v-model="alevel.control">
+                        <label>跳转层</label>
+                        <input v-model="alevel.controlto">
                     </div>
                     <div class="levelone" 
                         v-on:mouseup="dragMouseUp($event);moveDivMouseUp($event)" 
@@ -168,7 +172,13 @@
             </div>
             <div v-if="attrIsShow=='level'">
                 <div class="toolTitle">level属性</div>
+                <div class="attrButton"><label>跳转条件</label><input v-model="attrAreaNode.control"></div>
+                <div class="attrButton"><label>跳转层</label><input v-model="attrAreaNode.controlto"></div>
                 <div class="attrButton"><label>注释</label><textarea rows="8" v-model="attrAreaNode.description"></textarea></div>
+            </div>
+            <div  v-if="attrIsShow==''">
+                    <div class="toolTitle">数据流图属性</div>
+                <div class="attrButton"><label>数据流名称</label><input v-model="name"></div>
             </div>
         </div>
         <div id="levelrm" class="rightMenu">

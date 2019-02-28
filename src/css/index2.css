@@ -194,6 +194,10 @@ div{
     text-align: center;
     border-right: 2px dashed black;
 }
+.levelbar input{
+    width:90px;
+    text-align: center;
+}
 
 .levelone{
     height: 150px;
