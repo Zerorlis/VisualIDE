@@ -17,10 +17,10 @@
                 <div class="nav1Button">文件</div>
                 <div class="nav1DropContent">
                     <div class="normalNav2">
-                        <div class="nav2Button">打开 <input  type="file" class = "inputfile"> </div>
+                        <div class="nav2Button">打开 <input  type="file" id = "readFile" class = "inputfile" v-on:change = "jsReadFiles()"> </div>
                     </div>
                     <div class="normalNav2">
-                        <div class="nav2Button">保存</div>
+                        <div class="nav2Button" @click="save" >保存</div>
                     </div>
                     <div class="dropNav2">
                         <div class="nav2Button">二级菜单3 ></div>

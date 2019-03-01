@@ -37,104 +37,13 @@ testflow = {
             "description": "",
             "control": "true",
             "controlto": "",
-            "rule": [
-                {
-                    "id": "rule1",
-                    "name": "r_o_1",
-                    "type": "input",
-                    "parameter": "",
-                    "description": "一个输入的规则",
-                    "input": [],
-                },
-                {
-                    "id": "rule2",
-                    "name": "r_o_2",
-                    "type": "input",
-                    "parameter": "",
-                    "description": "一个输入的规则",
-                    "input": [],
-                },
-                {
-                    "id": "rule3",
-                    "name": "r_o_3",
-                    "type": "input",
-                    "parameter": "",
-                    "description": "一个输入的规则",
-                    "input": [],
-                },
-            ],
-            "variable": [
-                {
-                    "id": "variable1",
-                    "name": "score1",
-                    "value": 1,
-                    "description": "一个输入的变量",
-                    "input": ["rule3", "rule2"],
-                },
-                {
-                    "id": "variable2",
-                    "name": "score2",
-                    "value": 1,
-                    "description": "一个输入的变量",
-                    "input": [],
-                },
-
-            ]
-
-
-        },
-        {
-            "id": "level1",
-            "description": "",
-            "control": " >(j,to)",
-            "controlto": "level0",
-            "rule": [
-                {
-                    "id": "rule4",
-                    "name": "r_o_4",
-                    "type": "input",
-                    "parameter": "",
-                    "description": "一个输入的规则",
-                    "input": ["variable2", "variable1"],
-                },
-                {
-                    "id": "rule5",
-                    "name": "r_o_5",
-                    "type": "input",
-                    "parameter": "",
-                    "description": "一个输入的规则",
-                    "input": [],
-                },
-                {
-                    "id": "rule6",
-                    "name": "r_o_6",
-                    "type": "input",
-                    "parameter": "",
-                    "description": "一个输入的规则",
-                    "input": [],
-                },
-            ],
-            "variable": [
-                {
-                    "id": "variable7",
-                    "name": "score4",
-                    "value": 1,
-                    "description": "一个输入的变量",
-                    "input": [],
-                },
-                {
-                    "id": "variable8",
-                    "name": "scoe5",
-                    "value": 1,
-                    "description": "一个输入的变量",
-                    "input": [],
-                },
-            ]
-        }
+            "rule": [],
+            "variable":[],
+        },    
     ]
 }
 var getRandomID = (function () {
-    var ID = 0;
+    var ID = 1;
     return function (type) {
         return type + (ID++);
     }
@@ -178,8 +87,8 @@ commonFunction = {
             "rule": [],
             "variable": [],
             "description": "",
-            "control": "",
-            "controlto": null,
+            "control": "true",
+            "controlto": "",
         }
     },
     createCompute_flow: function (name) {
@@ -636,6 +545,15 @@ var workarea = new Vue({
             if (type != this.isDragAddNode) {
                 return; // 大部分的时候，会在这里直接返回掉，不用管
             }
+            // 如果当前无节点，直接加
+            if (type == "rule") {
+                this.addRule(level,9999999999);
+                return;
+            } else if (type == "variable") {
+                this.addVariable(level,99999999999);
+                return;
+            }
+            // 否则要算算加在哪个位置
             let num = this.computer_flow[level][type].length; // 这一层节点的数量
             let width = event.currentTarget.scrollWidth; // 这一层的宽度
             let space = width / num;
@@ -660,10 +578,13 @@ var workarea = new Vue({
             if (type != this.isDragAddNode) {
                 return; // 大部分的时候，会在这里直接返回掉，不用管
             }
-            console.log(type + "111");
-            console.log(this.isDragAddNode);
-            console.log(1111111);
             let num = this.computer_flow[level][type].length; // 这一层节点的数量
+            //当节点是0的时候
+            if(num==0){
+                var line = document.getElementById("aLineBetweenNode")
+                line.style.display = "none";
+                return;
+            }
             let width = event.currentTarget.scrollWidth; // 这一层的宽度
             let space = width / num;
             // 获取相对的位置
@@ -885,8 +806,41 @@ var workarea = new Vue({
             }
 
         },
-
-
+        jsReadFiles() {
+            var files = document.getElementById('readFile').files;
+            if (files.length) {
+                var file = files[0];
+                var reader = new FileReader();//new一个FileReader实例
+                // var name = selectedFile.name;//读取选中文件的文件名
+                // var size = selectedFile.size;//读取选中文件的大小
+                reader.onload = function () {
+                    console.log(this.result);
+                    let flows = toCompute_flow(this.result);
+                    console.log(flows);
+                    if(flows){
+                        workarea.computer_flow = flows[0]["flow"];
+                        workarea.name = flows[0]["name"];
+                        setTimeout(line.drawAllLine, 1);
+                    }
+                    
+                }
+                reader.readAsText(file);
+            }
+        },
+        download(filename, text) {
+            var element = document.createElement('a');
+            element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+            element.setAttribute('download', filename);
+            element.style.display = 'none';
+            document.body.appendChild(element);
+            element.click();
+            document.body.removeChild(element);
+        },
+        save(){
+            let fileContent = toCfiFile(workarea.computer_flow,workarea.name);
+            
+            this.download(workarea.name+".cfi",fileContent);
+        }
 
     },
     "computed": {
@@ -986,65 +940,6 @@ line = {
 line.drawAllLine();
 $(window).resize(line.drawAllLine);
 
-var testjs = "compute_flow iteration{\
-    level 0{\
-        rules{\
-            r_0_1: input(from);\
-            r_0_2: input(to);\
-        }\
-        variables {\
-            from: r_0_1;\
-            to: r_0_2;\
-        }\
-        control: true;\
-    }\
-    level 1{\
-        rules{\
-            r_1_1: pass(from);\
-            r_1_2: pass(0);\
-            r_1_3: pass(to);\
-        }\
-        variables {\
-            i: r_1_1;\
-            sum: r_1_2;\
-            to: r_1_3;\
-        }\
-        control: true;\
-    }\
-    level 2{\
-        rules{\
-            r_2_1: add(i,1);\
-            r_2_2: add(i,sum);\
-            r_2_3: pass(to);\
-        }\
-        variables {\
-            j: r_2_1;\
-            s: r_2_2;\
-            to:r_2_3;\
-        }\
-        control: >(j,to):1;\
-    }\
-    level 3{\
-        rules{\
-            r_3_1: pass(s);\
-        }\
-        variables {\
-            return: r_3_1;\
-        }\
-        control: true;\
-    }\
-    level 4{\
-        rules{\
-            r_1_1: >=(return,60);\
-            r_1_2: pass(\"passed\");\
-            r_1_3: pass(\"failed\");\
-        }\
-        variables {\
-            msg: r_1_1?r_1_2:r_1_3;\
-        }\
-        control: true;\
-    }\
-}";
 var regWord = /^[a-zA-Z_]\w*$/ // 变量的命名规范
 var regNum = /^\d+(\.\d+)?$/ // 数字或者小数的命名规范
 var regString = /(^".*"$)|(^'.*'$)/ //String的格式规范
@@ -1176,7 +1071,7 @@ function toCompute_flow(flow) {
                 for (let aruleIndex = 0; aruleIndex < ruleLevel.length; aruleIndex++) {
                     oldInput = ruleLevel[aruleIndex].input;
                     ruleLevel[aruleIndex].input = [];
-                    for(let i =0;i<oldInput.length;i++){
+                    for (let i = 0; i < oldInput.length; i++) {
                         if (ruleLevel[aruleIndex].parameter == "") {
                             ruleLevel[aruleIndex].parameter += oldInput[i];
                         } else {
@@ -1277,15 +1172,7 @@ function toCompute_flow(flow) {
     return (compute_flows);
 }
 
-var aa = toCompute_flow(testjs)[0];
-workarea.computer_flow = aa["flow"];
-workarea.name = aa["name"];
-setTimeout(line.drawAllLine, 1);
-
-
-//test
-//reg2 = /(?:(?<=,|^)".*?"(?=,|$))|(?:(?<=,|^)'.*?'(?=,|$))|(?:(?<=,|^)\d+(?:\.\d+)?(?=,|$))|(?:(?<=,|^)[a-zA-Z_]\w*(?=,|$))/
-function toCfiFile(compute_flow) {
+function toCfiFile(flow,flowName) {
     // 处理一层里面的ruleLevel，返回rules的字符串
     function processRuleLevel(ruleLevel, levelIndex, lastVariableLevel) {
         ruleString = "        rules{\nxxxxx        }\n";
@@ -1300,18 +1187,18 @@ function toCfiFile(compute_flow) {
                 console.log("error in level " + levelIndex + ":rule \"" + rule.name + "\" type is illegal")
                 return;
             }
-            if(levelIndex!=0){
+            if (levelIndex != 0) {
                 if (!regParameters_noWord.test(rule.parameter)) {
                     console.log("error in level" + levelIndex + ":rule \"" + rule.name + "\" parameter is illegal")
                     return;
                 }
-            }else{
+            } else {
                 if (!regParameters.test(rule.parameter)) {
                     console.log("error in level" + levelIndex + ":rule \"" + rule.name + "\" parameter is illegal")
                     return;
                 }
             }
-            
+
             // 处理input，input里面存着一群id，需要找到上一层的rule里面对应的名字
             let idList = [];
             let nameList = [];
@@ -1380,40 +1267,41 @@ function toCfiFile(compute_flow) {
                 let tmpList = [];
                 for (let i = 0; i < 3; i++) {
                     let j = idList.indexOf(variable.input[i])
-                    if (j<0){
+                    if (j < 0) {
                         console.log("error in level" + levelIndex + ":variable \"" + variable.name + "\" input has some wrong")
                         return;
                     }
                     tmpList.push(j);
                 }
                 tmpList.sort(sortNumber); // 从小到大排序
-                input = nameList[0]+"?"+nameList[1]+":"+nameList[2];
+                input = nameList[0] + "?" + nameList[1] + ":" + nameList[2];
 
-            }else{
+            } else {
                 console.log("error in level" + levelIndex + ":variable \"" + variable.name + "\" input has some wrong")
                 return;
             }
-            let avariablestr = "            "+variable.name+": "+input+";\nxxxxx";
+            let avariablestr = "            " + variable.name + ": " + input + ";\nxxxxx";
             variableString = variableString.replace("xxxxx", avariablestr);
         }
         variableString = variableString.replace("xxxxx", "");
         return variableString;
     }
-    function processControl(level,levelIndex){
-        if(level.control == "true"){
+    function processControl(level, levelIndex) {
+
+        if (level.control == "true") {
             return "        control: true;\n";
-        }else if(level.control == ""){
-            console.log("error in level " + levelIndex + ":variable \"" + variable.name + "\" is illegal")
+        } else if (level.control == "") {
+            console.log("error in level "+levelIndex+": control");                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           n level " + levelIndex + ":control is illegal")
             return;
+        } else if(level.controlto != ""){
+            return "        control: " + level.control + ":" + level.controlto + ";\n";
         }else{
-            return"        control: "+level.control+":"+level.controlto+"\n";
+            console.log("error in level "+levelIndex+": control or controlto");
+            return;
         }
     }
 
-    
-    let flow = compute_flow["flow"];
-    let flowName = compute_flow["name"];
-    let computer_flowStr = "computer_flow " +flowName+"{\nxxxxx}"; //xxxxx代表占位符，到时候替换掉
+    let computer_flowStr = "compute_flow " + flowName + "{\nxxxxx}"; //xxxxx代表占位符，到时候替换掉
     for (let levelIndex = 0; levelIndex < flow.length; levelIndex++) {
         let ruleLevel = flow[levelIndex]["rule"]
         let variableLevel = flow[levelIndex]["variable"];
@@ -1427,17 +1315,16 @@ function toCfiFile(compute_flow) {
         let variableStr = processVariableLevel(variableLevel, levelIndex, ruleLevel);
         // 第三步，处理control，传入整个层
         let controlStr = processControl(flow[levelIndex], levelIndex);
-        if(ruleStr==undefined||variableStr==undefined||controlStr==undefined){
+        if (ruleStr == undefined || variableStr == undefined || controlStr == undefined) {
             return;
         }
-        let levelStr = "    level "+levelIndex+"{\n"+ruleStr+variableStr+controlStr+"    }\nxxxxx";
-        computer_flowStr=computer_flowStr.replace("xxxxx",levelStr);
+        let levelStr = "    level " + levelIndex + "{\n" + ruleStr + variableStr + controlStr + "    }\nxxxxx";
+        computer_flowStr = computer_flowStr.replace("xxxxx", levelStr);
     }
-    computer_flowStr=computer_flowStr.replace("xxxxx","");
+    computer_flowStr = computer_flowStr.replace("xxxxx", "");
     return computer_flowStr;
 }
 
-console.log(toCfiFile(aa));
 
 
 
