@@ -38,8 +38,8 @@ testflow = {
             "control": "true",
             "controlto": "",
             "rule": [],
-            "variable":[],
-        },    
+            "variable": [],
+        },
     ]
 }
 var getRandomID = (function () {
@@ -547,10 +547,10 @@ var workarea = new Vue({
             }
             // 如果当前无节点，直接加
             if (type == "rule") {
-                this.addRule(level,9999999999);
+                this.addRule(level, 9999999999);
                 return;
             } else if (type == "variable") {
-                this.addVariable(level,99999999999);
+                this.addVariable(level, 99999999999);
                 return;
             }
             // 否则要算算加在哪个位置
@@ -580,7 +580,7 @@ var workarea = new Vue({
             }
             let num = this.computer_flow[level][type].length; // 这一层节点的数量
             //当节点是0的时候
-            if(num==0){
+            if (num == 0) {
                 var line = document.getElementById("aLineBetweenNode")
                 line.style.display = "none";
                 return;
@@ -817,12 +817,12 @@ var workarea = new Vue({
                     console.log(this.result);
                     let flows = toCompute_flow(this.result);
                     console.log(flows);
-                    if(flows){
+                    if (flows) {
                         workarea.computer_flow = flows[0]["flow"];
                         workarea.name = flows[0]["name"];
                         setTimeout(line.drawAllLine, 1);
                     }
-                    
+
                 }
                 reader.readAsText(file);
             }
@@ -836,10 +836,10 @@ var workarea = new Vue({
             element.click();
             document.body.removeChild(element);
         },
-        save(){
-            let fileContent = toCfiFile(workarea.computer_flow,workarea.name);
-            
-            this.download(workarea.name+".cfi",fileContent);
+        save() {
+            let fileContent = toCfiFile(workarea.computer_flow, workarea.name);
+
+            this.download(workarea.name + ".cfi", fileContent);
         }
 
     },
@@ -1172,7 +1172,7 @@ function toCompute_flow(flow) {
     return (compute_flows);
 }
 
-function toCfiFile(flow,flowName) {
+function toCfiFile(flow, flowName) {
     // 处理一层里面的ruleLevel，返回rules的字符串
     function processRuleLevel(ruleLevel, levelIndex, lastVariableLevel) {
         ruleString = "        rules{\nxxxxx        }\n";
@@ -1291,12 +1291,12 @@ function toCfiFile(flow,flowName) {
         if (level.control == "true") {
             return "        control: true;\n";
         } else if (level.control == "") {
-            console.log("error in level "+levelIndex+": control");                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           n level " + levelIndex + ":control is illegal")
+            console.log("error in level " + levelIndex + ": control is illegal");
             return;
-        } else if(level.controlto != ""){
+        } else if (level.controlto != "") {
             return "        control: " + level.control + ":" + level.controlto + ";\n";
-        }else{
-            console.log("error in level "+levelIndex+": control or controlto");
+        } else {
+            console.log("error in level " + levelIndex + ": control or controlto");
             return;
         }
     }
