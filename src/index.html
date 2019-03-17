@@ -6,113 +6,224 @@
     <link rel="stylesheet" type="text/css" href="css/index.css">
     <script src="js/jquery-3.3.1.js"></script>
     <script src="js/vue.min.js"></script>
+    <script src="js/StationJSLib.js"></script>
 
     <title>可视化编程</title>
 </head>
 
-<body>
+<body >
+    <div id="main" v-on:click="clear1()" v-on:contextmenu="clear1()">
+        <div id="navigationBar">
+            <div class="dropNav1">
+                <div class="nav1Button">文件</div>
+                <div class="nav1DropContent">
+                    <div class="normalNav2">
+                        <div class="nav2Button">打开 <input  type="file" id = "readFile" class = "inputfile" v-on:change = "jsReadFiles()"> </div>
+                    </div>
+                    <div class="normalNav2">
+                        <div class="nav2Button" @click="save()" >保存</div>
+                    </div>
+                    <!-- <div class="dropNav2">
+                        <div class="nav2Button">二级菜单3 ></div>
+                        <div class="nav2DropContent">
+                            <div class="normalNav3">
+                                <div class="nav3Button"三级菜单1</div>
+                            </div>
+                            <div class="normalNav3">
+                                <div class="nav3Button">三级菜单2</div>
+                            </div>
+                            <div class="normalNav3">
+                                <div class="nav3Button">三级菜单3</div>
+                            </div>
 
-    <div id="bar">
-        <div id="status" class="interbar">
-            <p>状态: </p>
-        </div>
-        <div id="debug" class="interbar">
-            <button> debug </button>
-        </div>
-        <div id="run" class="interbar">
-            <button> run </button>
-        </div>
-    </div>
-
-    <div id="tool">
-        <div id="toolbar">
-            <div>
-                <div class="rulemain" id="cancelchose">
-                    <p>取消选中</p>
-                </div>
-            </div>
-
-
-            <div>
-                <div class="rulemain" id="addvariable" v-on:click= "chooseAddVar($event)">
-                    <p>添加变量</p>
-                </div>
-            </div>
-
-
-            <div>
-                <div class="rulemain">
-                    <p>线条</p>
-                </div>
-                <div class="rulesecond" id="addline" v-on:click= "chooseAddLine($event)">
-                    <p> 添加线条 </p>
-                </div>
-                <div class="rulesecond" id="deleteline" v-on:click= "chooseDeleteLine($event)">
-                    <p> 删除线条 </p>
-                </div>
-            </div>
-
-
-            <div v-for="(item, key) in rules">
-                <div class="rulemain">
-                    <p> {{key}} </p>
-                </div>
-                <div class="rulesecond" v-for="i in item" :key="getDomID()+i" v-bind:id="getDomID()+i" v-on:click= "chooseRule($event,i)">
-                    <p> {{i}} </p>
-                </div>
-            </div>
-
-        </div>
-        <!-- <div id="description">
-            <p>描述:</p>
-            <p> 这是rule的描述</p>
-            <p>Value:</p>
-            <p> 这是value的值</p>
-        </div> -->
-    </div>
-    <div id="workarea">
-        <div id="work">
-            <canvas id="drawing"> </canvas>
-            <div id="levelbar" >
-                <div class="levelnote" v-for="(alevel,key) in data" :key="'bar'+key" v-bind:id="'bar'+key">
-                    <p>{{key}}</p>
-                    <button v-on:click="addNextLevel(key)"> 插入 </button>
-                    <button v-on:click="deleteLevel(key)"> 删除 </button>
-                </div>
-            </div>
-            <div>
-                <div class="level" v-for="(alevel,key) in data" :key="key" v-bind:id="key" v-on:click.stop= "chooseLevel($event)">
-                    <div class="sonlevel">
-                        <div class="rulediv" v-for="(value,k) in alevel.rules" :key="k" v-bind:id="k"v-on:click.stop= "chooseNode($event)">
-                            <div><label>名称</label><input v-model="value.id" v-on:click.stop=""></div>
-                            <div><input v-model="value.type" style="width:100%" v-on:click.stop=""></div>
-                            <div><label>参数</label><input v-model="value.parameter" v-on:click.stop=""></div>
-                            <!-- <button v-on:click.stop="deletenode(k)">删除</button> -->
                         </div>
                     </div>
-                    <div class="sonlevel">
-                        <div class="valuediv" v-for="(value,k) in alevel.variables" :key="k" v-bind:id="k" v-on:click.stop= "chooseNode($event)">
-                            <input v-model="value.name" v-on:click.stop="">
-                            <p v-on:click.stop=""> {{value.value}} </p>
-                            <!-- <button v-on:click.stop="deletenode(k)"> 删除 </button> -->
-                        </div> 
-                    </div>
+                    <div class="normalNav2">
+                        <div class="nav2Button">二级菜单4</div>
+                    </div> -->
                 </div>
             </div>
-            <div id="addlevel" v-on:click = "addLastLevel()">
-                <p> 添加level</p>
+            <div class="dropNav1">
+                <div class="nav1Button">调试</div>
+                <div class="nav1DropContent">
+                    <div class="normalNav2">
+                        <div class="nav2Button" @click="execFlow()">
+                            运行
+                        </div>
+                    </div>
+                    <!-- <div class="normalNav2">
+                        <div class="nav2Button">
+                            二级菜单2
+                        </div>
+                    </div>
+                    <div class="normalNav2">
+                        <div class="nav2Button">
+                            二级菜单3
+                        </div>
+                    </div>
+                    <div class="normalNav2">
+                        <div class="nav2Button">
+                            二级菜单4
+                        </div>
+                    </div> -->
+
+                </div>
+            </div>
+            <!-- <div class="normalNav1">
+                <div class="nav1Button">一级菜单3</div>
+            </div> -->
+        </div>
+        <div id="toolCase">
+            <div class="toolTitle">工具箱</div>
+            <div class="toolButton"  v-on:click.stop= "clear2();addRuleToolButton($event)" v-on:mousedown="dragABox($event,'rule')">规则</div>
+            <div class="toolButton"  v-on:click.stop= "clear2();addVariableToolButton($event)" v-on:mousedown="dragABox($event,'variable')">变量</div>
+            <div class="toolButton"  v-bind:class="{addLineing: isAddLine}" v-on:click= "clear1();addLineButton($event)">连线</div>
+
+        </div>
+        <div id="workarea">
+            <div id="innerworkarea">
+
+
+                <svg xmlns="http://www.w3.org/2000/svg" version="1.1" id="lines">
+
+                </svg>
+
+                <div class="level"  v-for="(alevel,index1) in computer_flow" :key="alevel.id" 
+                    v-bind:id="alevel.id"
+                    :data-loc="'level_'+index1" 
+                    v-on:contextmenu.stop="clear2();levelRight($event);choosedLevelButton($event)" 
+                    v-on:mousedown.stop="clear1()"
+                    v-bind:class="{choosedlevel: attrAreaNode!=null&&attrAreaNode.id == alevel.id }"
+                    v-bind:style="{ height: index1!=0?'300px':'150px'}">
+                    <div class="levelbar"  v-on:click.stop="clear1();choosedLevelButton($event)" :data-loc="'level_'+index1">
+                        <p>{{"level"+index1}}</p>
+                        <label v-if="index1!=0" >跳转条件</label>
+                        <input v-if="index1!=0" v-model="alevel.control">
+                        <label v-if="index1!=0">跳转层</label>
+                        <input v-if="index1!=0" v-model="alevel.controlto">
+                    </div>
+                    <div class="levelone" v-if="index1!=0"
+                        v-on:mouseup="dragMouseUp($event);moveDivMouseUp($event)" 
+                        v-on:mousemove="onMouseMove($event);moveDivMouseMove($event)" 
+                        :data-loc="'rule_'+index1">
+                        <div class="rulediv" v-for="(arule, index2) in alevel.rule" :key="arule.id" 
+                            v-bind:id="arule.id"
+                            :data-loc="'rule_'+index1+'_'+index2" 
+
+                            v-on:contextmenu.stop="clear2();nodeRight($event);choosedNodeButton($event)"
+                            v-on:click.stop="clear1();choosedNodeButton($event);addlinefunction($event)" 
+                            v-on:mousedown = "moveDivMouseDown($event)"
+                            v-bind:class="{chooseddiv: attrAreaNode!=null&&attrAreaNode.id == arule.id }">
+                            <div><label>名称</label><input v-model="arule.name"></div>
+                            <div><label>类型</label><input v-model="arule.type"></div>
+                            <div><label>参数</label><input v-model="arule.parameter"></div>
+                        </div>
+                    </div>
+
+                    <div class="levelone" 
+                    v-on:mouseup="dragMouseUp($event);moveDivMouseUp($event)" 
+                    v-on:mousemove="onMouseMove($event);moveDivMouseMove($event)" 
+                    :data-loc="'variable_'+index1">
+                        <div class="valuediv" v-for="(avariable, index3) in alevel.variable" :key="avariable.id"
+                            v-bind:id="avariable.id" 
+                            :data-loc="'variable_'+index1+'_'+index3" 
+                            v-on:contextmenu.stop="clear2();nodeRight($event);choosedNodeButton($event)"
+                            v-on:click.stop="clear1();choosedNodeButton($event);addlinefunction($event)"
+                            v-on:mousedown = "moveDivMouseDown($event)"
+                            v-bind:class="{chooseddiv: attrAreaNode!=null&&attrAreaNode.id==avariable.id}">
+                            <div><input v-model="avariable.name"></div>
+                            <div><span>{{avariable.value}}</span></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="addlevel" v-on:click="addLevelButton()">添加一层</div>
+                <div id="aLineBetweenNode">
+
+                </div>
+            </div>
+
+        </div>
+        <div id="attributeArea" v-on:click.stop = "">
+            <div v-if="attrIsShow=='rule'">
+                <div class="toolTitle">规则属性</div>
+                <div class="attrButton"><label>名称</label><input v-model="attrAreaNode.name"></div>
+                <div class="attrButton"><label>类型</label>
+                    <div class="dropattr"><input v-model="attrAreaNode.type">
+                        <div v-on:click="ruleBoxShow($event)">↓</div>
+                    </div>
+                </div>
+                <div id="ruleBox" class="ruleBox">
+                    <div class = ruleBoxName>规则选择框</div>
+                    <div class="ruleboxContent" v-for="(atype , key) in rules"> 
+                        <div class="ruleBoxClass" v-on:click="ruleBoxClassShow($event)">
+                            {{key}}
+                        </div>
+                        <div class="ruleBoxRule" v-for="(arule, index) in atype" v-on:click="ruleBoxRuleChange($event)">
+                            {{arule}}
+                        </div>
+                    </div>
+                </div>
+                <div class="attrButton"><label>参数(请用,隔开)</label><input v-model="attrAreaNode.parameter"></div>
+                <div class="attrButton"><label>注释</label><textarea rows="8" v-model="attrAreaNode.description"></textarea></div>
+            </div>
+            <div v-if="attrIsShow=='variable'">
+                <div class="toolTitle">变量属性</div>
+                <div class="attrButton"><label>名称</label><input v-model="attrAreaNode.name"></div>
+                <div class="attrButton"><label>值</label><input v-model="attrAreaNode.value" readonly="readonly"></div>
+                <div class="attrButton"><label>注释</label><textarea rows="8" v-model="attrAreaNode.description"></textarea></div>
+            </div>
+            <div v-if="attrIsShow=='level'">
+                <div class="toolTitle">level属性</div>
+                <div class="attrButton"><label>跳转条件</label><input v-model="attrAreaNode.control"></div>
+                <div class="attrButton"><label>跳转层</label><input v-model="attrAreaNode.controlto"></div>
+                <div class="attrButton"><label>注释</label><textarea rows="8" v-model="attrAreaNode.description"></textarea></div>
+            </div>
+            <div  v-if="attrIsShow==''">
+                    <div class="toolTitle">数据流图属性</div>
+                <div class="attrButton"><label>数据流名称</label><input v-model="name"></div>
+                <div class="attrButton"><label>调试参数(用&隔开)</label><input v-model="parameter"></div>
             </div>
         </div>
-    </div>
-    <div id="desc">
-        <div><label>名称</label><input v-on:click.stop=""></div>
-        <div><label>类型</label><input v-on:click.stop=""></div>
-        <div><label>参数</label><input v-on:click.stop=""></div>
-        <div><label>描述</label><input v-on:click.stop=""></div>
-    </div>
+        <div id="levelrm" class="rightMenu">
+            <div class="normalRightMenu">
+                <div class="rmButton" v-on:click="addUpLevelButton($event)">在上面插入一层</div>
+            </div>
+            <div class="normalRightMenu">
+                <div class="rmButton" v-on:click="addDownLevelButton($event)">在下面插入一层</div>
+            </div>
+            <div class="normalRightMenu">
+                <div class="rmButton" v-on:click="deleteLevelButton($event)"> 删除这层</div>
+            </div>
+            <div class="normalRightMenu">
+                <div class="rmButton" v-on:click="addRuleButton($event)">添加规则节点</div>
+            </div>
+            <div class="normalRightMenu">
+                <div class="rmButton" v-on:click="addVariableButton($event)">添加值节点</div>
+            </div>
+        </div>
+        <div id="levelrmInLevel0" class="rightMenu">
+            <div class="normalRightMenu">
+                <div class="rmButton" v-on:click="addDownLevelButton($event)">在下面插入一层</div>
+            </div>
+            <div class="normalRightMenu">
+                <div class="rmButton" v-on:click="addVariableButton($event)">添加值节点</div>
+            </div>
+        </div>
+        <div id="noderm" class="rightMenu">
+            <div class="normalRightMenu">
+                <div class="rmButton" v-on:click="deleteNodeButton($event)">删除</div>
+            </div>
+        </div>
+        <div id="linesrm" class="rightMenu">
+            <div class="normalRightMenu">
+                <div class="rmButton" v-on:click="deletelineButton($event)">删除</div>
+            </div>
+        </div>
+        <div id="dragBox">
+            
+        </div>
 
+
+    </div>
+    <script src="js/index.js"></script>
 </body>
-
-<script src="js/index.js"></script>
-
-</html>
