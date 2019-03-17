@@ -574,16 +574,20 @@ var workarea = new Vue({
             if (type != this.isDragAddNode) {
                 return; // 大部分的时候，会在这里直接返回掉，不用管
             }
-            // 如果当前无节点，直接加
-            if (type == "rule") {
-                this.addRule(level, 9999999999);
-                return;
-            } else if (type == "variable") {
-                this.addVariable(level, 99999999999);
-                return;
-            }
-            // 否则要算算加在哪个位置
             let num = this.computer_flow[level][type].length; // 这一层节点的数量
+            if (num == 0) {
+                // 如果当前无节点，直接加
+                if (type == "rule") {
+                    this.addRule(level, 9999999999);
+                    return;
+                } else if (type == "variable") {
+                    this.addVariable(level, 99999999999);
+                    return;
+                }
+            }
+
+            // 否则要算算加在哪个位置
+
             let width = event.currentTarget.scrollWidth; // 这一层的宽度
             let space = width / num;
             // 获取相对的位置
@@ -934,8 +938,8 @@ var workarea = new Vue({
             }
         },
         ///////////////////// 写的位置,函数要求，根据attrAreaNode，得到当前的层数，到html里面用v-if判断是不是第一层，改变那个readonly
-        getAttrLevel: function() {
-            attrAreaNode
+        getAttrLevel: function () {
+            //this.attrAreaNode
         },
     }
 
@@ -1121,7 +1125,7 @@ function toCompute_flow(flow) {
                     levelNew.rule.push(ruleNew);
                 }
 
-            }   
+            }
             for (let avariableIndex in alevel["variables"]) {
                 let avariable = alevel["variables"][avariableIndex];
                 let name = avariableIndex;
@@ -1396,28 +1400,28 @@ function toCfiFile(flow, flowName) {
             return;
         }
     }
-    function processLevel0(level0){
+    function processLevel0(level0) {
         level0Str = "    level 0 {\n        rules{\n斚斖斴1        }\n        variables{\n斚斖斴2        }\n        control: true;\n    }\n斚斖斴";// 第0层的Str的模板，需要添加两个地方
-        for (let variable of level0["variable"] ){
+        for (let variable of level0["variable"]) {
             if (!regWord.test(variable.name)) {
                 console.log("error in level 0 :variable \"" + variable.name + "\" is illegal");
                 return;
             }
             ruleName = commonFunction.getRandomID("NewRule"); // 获取rule的名字,这个名字直接产生就好
-            ruleStr = "            "+ruleName+": input("+variable.name+");\n斚斖斴1";
-            variableStr = "            "+variable.name+": "+ruleName+";\n斚斖斴2";
-            level0Str=level0Str.replace("斚斖斴1", ruleStr);
-            level0Str=level0Str.replace("斚斖斴2", variableStr);
+            ruleStr = "            " + ruleName + ": input(" + variable.name + ");\n斚斖斴1";
+            variableStr = "            " + variable.name + ": " + ruleName + ";\n斚斖斴2";
+            level0Str = level0Str.replace("斚斖斴1", ruleStr);
+            level0Str = level0Str.replace("斚斖斴2", variableStr);
 
         }
         level0Str = level0Str.replace("斚斖斴1", "");
         level0Str = level0Str.replace("斚斖斴2", "");
         return level0Str;
-}
+    }
 
     let computer_flowStr = "compute_flow " + flowName + "{\n斚斖斴}"; //斚斖斴代表占位符，到时候替换掉
     // 第0层特殊处理
-    let level0_str=processLevel0(flow[0]);
+    let level0_str = processLevel0(flow[0]);
     computer_flowStr = computer_flowStr.replace("斚斖斴", level0_str);
     for (let levelIndex = 1; levelIndex < flow.length; levelIndex++) {
         let ruleLevel = flow[levelIndex]["rule"]
