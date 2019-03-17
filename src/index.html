@@ -169,7 +169,7 @@
             <div v-if="attrIsShow=='variable'">
                 <div class="toolTitle">变量属性</div>
                 <div class="attrButton"><label>名称</label><input v-model="attrAreaNode.name"></div>
-                <div class="attrButton"><label>值</label><input v-model="attrAreaNode.value" readonly="readonly"></div>
+                <div class="attrButton"><label>值</label><input v-model="attrAreaNode.value" v-bind:readonly="getAttrLevel"></div>
                 <div class="attrButton"><label>注释</label><textarea rows="8" v-model="attrAreaNode.description"></textarea></div>
             </div>
             <div v-if="attrIsShow=='level'">

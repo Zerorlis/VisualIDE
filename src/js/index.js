@@ -32,12 +32,12 @@
 testflow = {
     "name": "flow",
     "flow": [
-        {
+        { //level
             "id": "level0", // 保持全局唯一即可，
             "description": "",
             "control": "true",
             "controlto": "",
-            "rule": [],
+            "rule": [], 
             "variable": [],
         },
     ]
@@ -918,9 +918,13 @@ var workarea = new Vue({
         },
         getLastLevelVariable() {
             return this.computer_flow[this.computer_flow.length - 1]["variable"];
+        },
+        getParameter(){
+            return "a=1&b=2";
         }
 
     },
+
     "computed": {
         attrIsShow: function () {
             if (this.attrAreaNode != null && this.attrAreaNode.id[0] == "r") {
@@ -935,7 +939,12 @@ var workarea = new Vue({
         },
         ///////////////////// 写的位置,函数要求，根据attrAreaNode，得到当前的层数，到html里面用v-if判断是不是第一层，改变那个readonly
         getAttrLevel: function() {
-            attrAreaNode
+            let level = commonFunction.getLocFromID(this.attrAreaNode.id)["level"];
+            if (level != 0){               
+               return true;
+            }else{                
+              return false;
+           }
         },
     }
 
